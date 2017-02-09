@@ -30,7 +30,22 @@ autoload -Uz compinit && compinit -u
 # URLをエスケープする
 autoload -Uz url-quote-magic
 # VCS情報の表示を有効にする
+autoload -Uz add-zsh-hook
 autoload -Uz vcs_info
+setopt prompt_subst
+
+zstyle ':vcs_info:*' formats '(%s)-[%b]'
+zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
+
+function _update_vcs_info_msg() {
+  psvar=()
+  LANG=US.UTF-8 vcs_info
+  psvar[1]="$vcs_info_msg_0_"
+}
+
+add-zsh-hook precmd _update_vcs_info_msg
+RPROMPT="%v"
+
 # 文字入力時にURLをエスケープする
 zle -N self-insert url-quote-magic
 
@@ -53,6 +68,14 @@ alias htop='sudo htop'
 if (( ${+commands[vim]} )); then
   alias vi='vim'
 fi
+
+alias la='ls -a' # dot(.)で始まるディレクトリ、ファイルも表示
+alias la='ls -al' # -a オプションと -l オプションの組み合わせ
+alias ll='ls -lav'
+alias ll='ls -l' # ファイルの詳細も表示
+alias lla='ls -la' # -a オプションと -l オプションの組み合わせ
+alias ls='ls -F' # ディレクトリ名の末尾にはスラッシュ、シンボリックリンクの末尾には@というように種類ごとの表示をつけてくれる
+alias ls='ls -v -G' # Gはアウトプットに色を付けてくれる
 
 # -------------------------------------------------
 # user environment
@@ -86,6 +109,7 @@ zplug "mollifier/cd-gitroot"
 zplug "mrowa44/emojify", as:command
 zplug "b4b4r07/emoji-cli"
 zplug "stedolan/jq", from:gh-r, as:command
+zplug "sorin-ionescu/prezto"
 zplug "modules/prompt", from:prezto
 # zstyle は zplug load の前に設定する
 zstyle ':prezto:module:prompt' theme 'paradox'
@@ -96,25 +120,31 @@ zplug "junegunn/fzf-bin", \
       use:"*darwin*amd64*"
 zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
 zplug "b4b4r07/enhancd", use:enhancd.sh
-
+# Tracks your most used directories, based on 'frecency'.
+zplug "rupa/z", use:"*.sh"
 # for MacOS
 zplug "modules/osx", from:prezto, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "plugins/git", from:oh-my-zsh
 
-if ! zplug check --verbose; then
-  printf 'Install? [y/N]: '
-  if read -q; then
-    echo; zplug install
-  fi
-fi
+if ! zplug check; then
+      zplug install
+    fi
 
-zplug load --verbose
+zplug load
 
 bindkey '^j^j' anyframe-widget-cdr
 bindkey '^j^r' anyframe-widget-execute-history
 bindkey '^j^g' anyframe-widget-cd-ghq-repository
 bindkey '^j^t' anyframe-widget-tmux-attach
+
+bindkey -d
+#zplug load --verbose
+bindkey -e
+ 
+bindkey '^f' forward-word
+bindkey '^b' backward-word
+bindkey '^d' kill-wor
 
 export CLICOLOR=1
 export EDITOR='vim'
