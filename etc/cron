@@ -1,0 +1,7 @@
+# dotfilesを最新化 & update
+# 0 0 * * * cd ~/dotfiles/ && make install && make update
+
+# Brewfileの内容を元にupdateする
+0 0 * * * brew file update
+0 0 * * * brew file cask_upgrade
+

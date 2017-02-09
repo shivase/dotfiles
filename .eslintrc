@@ -1,0 +1,10 @@
+{
+  "extends": "eslint",
+  "env": {
+      "browser": true
+  },
+  "rules": {
+    "indent": [2, 2],
+    "no-multi-spaces": 0,
+  }
+}

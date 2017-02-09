@@ -1,0 +1,9 @@
+* Makefile
+ * rbenv
+ * perbrew
+ * git
+* vim
+ * それぞれの定義毎のファイル分ける
+ * 色々定義足りてない
+* backup
+ * symlinkまでバックアップされてる

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+URL=$1
+DOMAIN=`echo "${URL}" | cut -d"/" -f3`
+
+wget \
+--recursive \
+--no-clobber \
+--page-requisites \
+--html-extension \
+--convert-links \
+--restrict-file-names=windows \
+--domains ${DOMAIN} \
+--no-parent \
+${URL}

@@ -1,0 +1,27 @@
+#!/bin/sh
+
+new_ip=""
+old_ip=`ifconfig en0 | grep netmask | cut -d' ' -f2`
+new_mac=""
+old_mac=`ifconfig en0 | grep ether |  cut -d' ' -f2`
+change=`perl -e 'for ($i=0;$i<5;$i++){@m[$i]=int(rand(256));} printf "03:%X:%X:%X:%X:%X\n",@m;'`
+
+echo "Changing MAC address..."
+echo "Old   -> IP address: ${old_ip} MAC address: ${old_mac}"
+sudo ifconfig en0 ether $change
+sudo ifconfig en0 down
+sleep 5
+sudo ifconfig en0 up
+
+echo "MAC address changed. Reconnecting a network ..."
+while :
+do
+  new_ip=`ifconfig en0 | grep netmask | cut -d' ' -f2`
+  new_mac=`ifconfig en0 | grep ether |  cut -d' ' -f2`
+  if [ -n "${new_ip}" -a -n "${new_mac}" ]; then
+    break
+  fi
+  sleep 1
+done
+
+echo "NEW!! -> IP address: ${new_ip} MAC address: ${new_mac}"

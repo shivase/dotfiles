@@ -1,0 +1,23 @@
+[submodule ".vim/bundle/neobundle.vim"]
+	path = .vim/bundle/neobundle.vim
+	url = https://github.com/Shougo/neobundle.vim.git
+	ignore = dirty
+[submodule ".zsh/z"]
+	path = .zsh/z
+	url = https://github.com/rupa/z
+	ignore = dirty
+[submodule ".zsh/antigen"]
+	path = .zsh/antigen
+	url = https://github.com/zsh-users/antigen.git
+	ignore = dirty
+[submodule ".zprezto"]
+	path = .zprezto
+	url = https://github.com/kegamin/prezto.git
+[submodule ".zsh/zaw"]
+	path = .zsh/zaw
+	url = http://github.com/zsh-users/zaw.git
+	ignore = dirty
+[submodule ".vim/bundle/vimproc"]
+	path = .vim/bundle/vimproc
+	url = https://github.com/Shougo/vimproc.vim.git
+	ignore = dirty

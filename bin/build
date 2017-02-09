@@ -1,0 +1,6 @@
+#!/bin/bash
+
+fname_ext="${1##*/}"
+fname="${fname_ext%.*}"
+
+clang -std=c99 -Wall $1 -o $fname

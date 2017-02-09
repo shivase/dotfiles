@@ -1,0 +1,7 @@
+NeoBundle 'basyura/TweetVim'
+"NeoBundle 'mattn/webapi-vim'
+NeoBundle 'basyura/twibill.vim'
+NeoBundle 'tyru/open-browser.vim'
+NeoBundle 'h1mesuke/unite-outline'
+NeoBundle 'basyura/bitly.vim'
+NeoBundle 'Shougo/unite.vim'

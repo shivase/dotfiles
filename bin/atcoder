@@ -1,0 +1,6 @@
+#!/bin/sh
+
+if $1 eq "ruby" then
+  ruby2.3 --disable-gems -w -c ./Main.rb
+fi
+
