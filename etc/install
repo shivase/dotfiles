@@ -1,0 +1,97 @@
+#!/bin/sh
+
+### Insert newline
+e_newline() { printf "\n"; }
+### Normal style of writing
+e_header()  { printf "\033[1m%s\033[0m\n" "$*"; }
+### Success
+e_success() { printf " \033[1;32m✔ \033[0m  %s\n" "$*"; }
+### Failure
+e_error()   { printf " \033[1;31m✗ \033[0m  %s\n" "$*" 1>&2; }
+### Result
+e_arrow()   { printf " \033[1;34m→ \033[0m  %s\n" "$*"; }
+
+is_exists() {
+    local i
+    for i in "$@";do
+        if which "$i" >/dev/null 2>&1; then
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+dotfiles_install() {
+    ### 1. Download the repository
+    ### ==> downloading
+    ###
+    ### Priority: git > curl > wget
+    dotfiles_download &&
+
+    ### 2. Deploy dotfiles to your home directory
+    ### ==> deploying
+    dotfiles_deploy &&
+
+    ### 3. Execute all sh files within etc/init/
+    ### ==> initializing
+    dotfiles_initialize "$@"
+}
+
+### Environment valuable
+DOTFILES=~/.dotfiles; export DOTFILES
+GITHUB_DOTFILES="https://github.com/kegamin/dotfiles.git"; export GITHUB_DOTFILES
+
+dotfiles_download() {
+    e_header "Downloading dotfiles..."
+    [ "$DEBUG" = 1 ] && return 0
+
+    local tarball="https://github.com/kegamin/dotfiles/archive/master.tar.gz"
+
+    ### Check if $DOTFILES exists
+    if [ -d $DOTFILES ]; then
+        cd
+        e_newline
+        e_arrow "$DOTFILES: already exists, removing..."
+        mv -f "$DOTFILES" "${DOTFILES}.$(date "+%Y%m%d%S")"
+    fi
+
+    e_newline
+
+    if is_exists "git"; then
+        ### --recursive equals to ...
+        ### git submodule init
+        ### git submodule update
+        git clone --recursive "$GITHUB_DOTFILES" "$DOTFILES"
+    elif is_exists "curl" "wget"; then
+        ### curl or wget
+        if is_exists "curl"; then
+            curl -L "$tarball"
+        elif is_exists "wget"; then
+            wget -O - "$tarball"
+        fi | tar xv -
+        mv -f dotfiles-master "$DOTFILES"
+    else
+        ### requirement
+        interrupt "Require git, curl or wget!"
+    fi
+    e_newline
+}
+
+
+e_newline
+
+dotfiles_install "$@"
+
+if [ -t 0 ]; then
+    ### Restart shell if specified "bash -c $(curl -L {URL})"
+    ### not restart:
+    ###   curl -L {URL} | bash
+    e_arrow "Restarting your shell..."
+    exec "${SHELL:-/bin/zsh}"
+else
+    e_arrow "Restart your shell, manually"
+fi
+
+e_success "All done. Success!"
+

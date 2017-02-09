@@ -1,0 +1,49 @@
+#===========================================================
+# Wildcard Patterns
+#-----------------------------------------------------------
+# *             Matches any string of characters, except path separators (/)
+# **            Matches any string of characters
+# ?             Matches any single character
+# name          Matches any single character in name
+# !name         Matches any single character not in name
+# {s1,s2,s3}    Matches any of the strings given (separated by commas)
+#
+#===========================================================
+# Supported Properties
+#-----------------------------------------------------------
+# indent_style: tab or space
+# indent_size
+# tab_width
+# end_of_line: set to lf, cr, or crlf to control how line breaks are represented.
+# charset:  latin1, utf-8, utf-8-bom, utf-16be or utf-16le
+# trim_trailing_whitespace:set to true to remove any whitespace characters preceding newline characters and false to ensure it doesn't.
+# insert_final_newline
+# root: special property that should be specified at the top of the file outside of any sections. Set to true to stop .editorconfig files search on current file.
+#
+#
+#===========================================================
+# My Settings
+#-----------------------------------------------------------
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = 0
+# vimではinsert_final_newlineが有効にならない
+
+[*.c]
+indent_style = space
+indent_size = 4
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.plist]
+indent_style = tab

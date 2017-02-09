@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# pyenvのwarningがでてしまう問題の対処
+# http://www.task-notes.com/entry/20141223/1419324649
+PATH=${PATH/\/Users\/${USER}\/\.anyenv\/envs\/pyenv\/shims:?/}
+
+log_dir=$HOME/Library/Logs/Homebrew/update
+log_name=${log_dir}/`date "+%Y%m%d"`.log
+
+if [ ! -d ${log_dir} ]; then
+  mkdir -p ${log_dir}
+fi
+
+brew doctor | tee ${log_name} 2>&1
+if [ $? -ne 0 ]; then
+    brew file update | tee ${log_name} 2>&1
+    brew file cask_upgrade | tee ${log_name} 2>&1
+else
+  echo ""
+fi

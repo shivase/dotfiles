@@ -1,0 +1,62 @@
+#!/bin/sh
+
+# dotfiles配下の各種updateを実行する
+
+source $HOME/dotfiles/etc/lib/vital.sh
+
+e_header "Update dotfiles plugins..."
+
+if type git > /dev/null 2>&1; then
+  e_arrow "update git repositories"
+  git pull origin master
+  git submodule update --init --recursive
+  git submodule foreach git pull origin master
+  e_done "update git repositories"
+fi
+
+if type anyenv > /dev/null 2>&1; then
+  e_arrow "update anyenv"
+  git pull origin master
+  anyenv update
+  e_done "update anyenv"
+fi
+
+if type brew > /dev/null 2>&1; then
+  e_arrow "update brew applications"
+  $HOME/dotfiles/bin/brew_update
+  e_done "update brew applications"
+fi
+
+if type vim > /dev/null 2>&1; then
+  if [ -d $HOME/.vim ]; then
+    e_arrow "update vim plugins"
+    if is_osx ; then
+      make -C $HOME/.vim/bundle/vimproc -f make_mac.mak
+    elif is_linux ; then
+      make -C $HOME/.vim/bundle/vimproc -f make_unix.mak
+    fi
+    vim -u $HOME/.vimrc -i NONE -c "try | NeoBundleUpdate! | finally | q! | endtry" -e -s -V1
+    e_done "update vim plugins"
+  fi
+fi
+
+if type cabal > /dev/null 2>&1; then
+  e_arrow "update cabal"
+  cabal update
+  e_done "update cabal"
+fi
+
+if type tlmgr > /dev/null 2>&1; then
+  e_arrow "update tlmgr and tlmgr plugins"
+  sudo tlmgr update --self
+  sudo tlmgr update --all
+  e_done "update tlmgr and tlmgr plugins"
+fi
+
+if type antigen > /dev/null 2>&1; then
+  e_arrow "update antigen"
+  antigen update
+  e_done "update antigen"
+fi
+
+e_success "update dotfiles plugins"
