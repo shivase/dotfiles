@@ -103,6 +103,8 @@ fi
 ###################################################
 source ~/.zplug/init.zsh
 zplug 'zsh-users/zsh-autosuggestions'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=250'
+
 zplug 'zsh-users/zsh-syntax-highlighting', defer:2
 zplug 'zsh-users/zsh-completions'
 zplug 'mollifier/anyframe'
