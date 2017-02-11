@@ -23,8 +23,6 @@ setopt share_history
 # C-sでのヒストリ検索が潰されてしまうため、出力停止・開始用にC-s/C-qを使わない。
 setopt no_flow_control
 
-# フック機能を有効にする
-autoload -Uz add-zsh-hook
 # コマンドのオプションや引数を補完する
 autoload -Uz compinit && compinit -u
 # URLをエスケープする
@@ -32,6 +30,9 @@ autoload -Uz url-quote-magic
 # VCS情報の表示を有効にする
 autoload -Uz add-zsh-hook
 autoload -Uz vcs_info
+# cdrを有効
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+
 setopt prompt_subst
 
 zstyle ':vcs_info:*' formats '(%s)-[%b]'
@@ -133,15 +134,14 @@ if ! zplug check; then
 
 zplug load
 
+#zplug load --verbose
+bindkey -e
+
 bindkey '^j^j' anyframe-widget-cdr
 bindkey '^j^r' anyframe-widget-execute-history
 bindkey '^j^g' anyframe-widget-cd-ghq-repository
 bindkey '^j^t' anyframe-widget-tmux-attach
 
-bindkey -d
-#zplug load --verbose
-bindkey -e
- 
 bindkey '^f' forward-word
 bindkey '^b' backward-word
 bindkey '^d' kill-wor
