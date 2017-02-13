@@ -52,6 +52,7 @@ zle -N self-insert url-quote-magic
 
 # コマンド補完定義
 add-zsh-hook chpwd chpwd_recent_dirs
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*:*:cdr:*:*' menu selection
 zstyle ':completion:*' recent-dirs-insert both
 zstyle ':chpwd:*' recent-dirs-max 500
@@ -168,6 +169,7 @@ path=(
   /usr/local/heroku/bin(N-/)     # heroku toolbelt
   /usr/local/bin
   /usr/local/sbin
+  /usr/local/share/zsh/site-functions(N-/)
   $path
 )
 
