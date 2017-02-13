@@ -54,4 +54,7 @@ Plug 'Shougo/vimproc.vim', { 'dir': '~/.vim/plugged/vimproc.vim', 'do': 'make' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
+" block chain program
+Plug 'tomlion/vim-solidity'
+
 call plug#end()
