@@ -2,9 +2,8 @@
 tags
 TAGS
 *.log
-.vim/bundle/*
-!.vim/bundle/neobundle.vim
-!.vim/bundle/vimproc
+.vim/plugged/*
+.vim/bundle/
 .vim/.netrwhist
 .ruby-version
 .DS_Store
