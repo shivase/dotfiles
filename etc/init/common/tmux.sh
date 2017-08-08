@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. "$DOTPATH"/etc/lib/vital.sh
+. $HOME/dotfiles/etc/lib/vital.sh
 
 # tmuxのヘッダーに表示するようのツール群を配置
 if [ ! -d /usr/local/bin ];then
