@@ -53,3 +53,7 @@ if [ -z "$TMUX" -a -z "$STY" ]; then
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/Users/ikegami/.sdkman"
+[[ -s "/Users/ikegami/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/ikegami/.sdkman/bin/sdkman-init.sh"
