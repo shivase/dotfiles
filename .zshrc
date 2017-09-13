@@ -188,13 +188,6 @@ if [ -d $HOME/.anyenv ] ; then
 fi
 
 # -------------------------------------------------
-# sdkman
-#
-if [ -d $HOME/.sdkman ] ; then
-    source $HOME/.sdkman/bin/sdkman-init.sh
-fi
-
-# -------------------------------------------------
 # my profiles
 
 for rcfiles in $( ls $HOME/dotfiles/etc/profile/*.sh ); do
