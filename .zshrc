@@ -177,7 +177,7 @@ path=(
 # Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
 # Remove -X and -F (exit if the content fits on one screen) to enable it.
 export LESS='-F -g -i -M -R -S -w -X -z-4'
-
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
 # -------------------------------------------------
 # anyenv
@@ -188,8 +188,19 @@ if [ -d $HOME/.anyenv ] ; then
 fi
 
 # -------------------------------------------------
+# sdkman
+#
+if [ -d $HOME/.sdkman ] ; then
+    source $HOME/.sdkman/bin/sdkman-init.sh
+fi
+
+# -------------------------------------------------
 # my profiles
 
 for rcfiles in $( ls $HOME/dotfiles/etc/profile/*.sh ); do
   source $rcfiles
 done
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/Users/ikegami/.sdkman"
+[[ -s "/Users/ikegami/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/ikegami/.sdkman/bin/sdkman-init.sh"
