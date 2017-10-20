@@ -116,7 +116,7 @@ zplug "stedolan/jq", from:gh-r, as:command
 zplug "sorin-ionescu/prezto"
 zplug "modules/prompt", from:prezto
 # zstyle は zplug load の前に設定する
-zstyle ':prezto:module:prompt' theme 'powerline'
+zstyle ':prezto:module:prompt' theme 'paradox'
 zplug "junegunn/fzf-bin", \
       from:gh-r, \
       as:command, \
