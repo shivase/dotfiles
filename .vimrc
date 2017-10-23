@@ -134,5 +134,10 @@ let g:syntastic_mode_map = { 'mode': 'passive',
 " 「:wq」で終了する時も構文エラーチェックする
 let g:syntastic_check_on_wq = 1
 
+" coffee script
+"----------------------------------------------------------
+Plug 'kchmck/vim-coffee-script', { 'for' : 'coffee' }
+
 call plug#end()
+
 
