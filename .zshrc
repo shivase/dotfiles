@@ -154,7 +154,7 @@ export EDITOR='vim'
 export VISUAL='vim'
 export PAGER='less'
 export GITHUB_URL=https://github.com/
-export ANDROID_HOME='/usr/local/opt/android-sdk'
+export ANDROID_HOME='/usr/local/share/android-sdk'
 
 if [[ -z "$LANG" ]]; then
   export LANG='ja_JP.UTF-8'
@@ -170,6 +170,8 @@ path=(
   /usr/local/bin
   /usr/local/sbin
   /usr/local/share/zsh/site-functions(N-/)
+  $ANDROID_HOME/tools
+  $ANDROID_HOME/platform-tools
   $path
 )
 
