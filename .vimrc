@@ -138,6 +138,11 @@ let g:syntastic_check_on_wq = 1
 "----------------------------------------------------------
 Plug 'kchmck/vim-coffee-script', { 'for' : 'coffee' }
 
+" teffaform
+"----------------------------------------------------------
+Plug 'hashivim/vim-terraform'
+let g:terraform_fmt_on_save = 1
+
 call plug#end()
 
 
