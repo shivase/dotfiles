@@ -143,6 +143,10 @@ Plug 'kchmck/vim-coffee-script', { 'for' : 'coffee' }
 Plug 'hashivim/vim-terraform'
 let g:terraform_fmt_on_save = 1
 
+" Go Language
+"----------------------------------------------------------
+Plug 'fatih/vim-go'
+
 call plug#end()
 
 
