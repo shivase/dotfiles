@@ -8,7 +8,7 @@ setopt list_packed
 
 # ヒストリー定義
 HISTFILE=~/.zsh_history
-HISTSIZE=10000
+HISTSIZE=100000
 SAVEHIST=$HISTSIZE
 # ヒストリファイルにコマンドラインだけではなく実行時刻と実行時間も保存する。
 setopt extended_history
@@ -170,6 +170,7 @@ path=(
   /usr/local/bin
   /usr/local/sbin
   /usr/local/share/zsh/site-functions(N-/)
+  ./node_modules/.bin
   $ANDROID_HOME/tools
   $ANDROID_HOME/platform-tools
   $path
@@ -210,3 +211,6 @@ eval "$(direnv hook zsh)"
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
 [[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
