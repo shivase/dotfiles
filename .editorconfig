@@ -52,6 +52,10 @@ trim_trailing_whitespace = false
 [*.plist]
 indent_style = tab
 
-[.go]
+[*.go]
+indent_style = tab
+indent_size = 4
+
+[Makefile]
 indent_style = tab
 indent_size = 4
