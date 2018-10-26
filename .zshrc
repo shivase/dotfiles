@@ -102,7 +102,36 @@ fi
 ###################################################
 # zsh plugins
 ###################################################
-source ~/.zplug/init.zsh
+
+export ZPLUG_HOME=/usr/local/opt/zplug
+export CLICOLOR=1
+export EDITOR='vim'
+export VISUAL='vim'
+export PAGER='less'
+export GITHUB_URL=https://github.com/
+export ANDROID_HOME='/usr/local/share/android-sdk'
+source $ZPLUG_HOME/init.zsh
+
+if [[ -z "$LANG" ]]; then
+  export LANG='ja_JP.UTF-8'
+fi
+
+path=(
+  $HOME/dotfiles/bin             # original dotfiles bin
+  $HOME/.cabal/bin               # haskel package manager
+  $HOME/.anyenv/bin              # anyenv(plenv,ndenv,rbenv...)
+  $GOPATH/bin                    # Go
+  /Library/TeX/texbin(N-/)
+  /usr/local/heroku/bin(N-/)     # heroku toolbelt
+  /usr/local/bin
+  /usr/local/sbin
+  /usr/local/share/zsh/site-functions(N-/)
+  ./node_modules/.bin
+  $ANDROID_HOME/tools
+  $ANDROID_HOME/platform-tools
+  $path
+)
+
 zplug 'zsh-users/zsh-autosuggestions'
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=250'
 
@@ -149,38 +178,10 @@ bindkey '^f' forward-word
 bindkey '^b' backward-word
 bindkey '^d' kill-wor
 
-export CLICOLOR=1
-export EDITOR='vim'
-export VISUAL='vim'
-export PAGER='less'
-export GITHUB_URL=https://github.com/
-export ANDROID_HOME='/usr/local/share/android-sdk'
-
-if [[ -z "$LANG" ]]; then
-  export LANG='ja_JP.UTF-8'
-fi
-
-path=(
-  $HOME/dotfiles/bin             # original dotfiles bin
-  $HOME/.cabal/bin               # haskel package manager
-  $HOME/.anyenv/bin              # anyenv(plenv,ndenv,rbenv...)
-  $GOPATH/bin                    # Go
-  /Library/TeX/texbin(N-/)
-  /usr/local/heroku/bin(N-/)     # heroku toolbelt
-  /usr/local/bin
-  /usr/local/sbin
-  /usr/local/share/zsh/site-functions(N-/)
-  ./node_modules/.bin
-  $ANDROID_HOME/tools
-  $ANDROID_HOME/platform-tools
-  $path
-)
-
 # Set the default Less options.
 # Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
 # Remove -X and -F (exit if the content fits on one screen) to enable it.
 export LESS='-F -g -i -M -R -S -w -X -z-4'
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
 # -------------------------------------------------
 # anyenv
