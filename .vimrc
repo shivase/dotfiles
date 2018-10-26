@@ -147,6 +147,15 @@ let g:terraform_fmt_on_save = 1
 "----------------------------------------------------------
 Plug 'fatih/vim-go'
 
+" JavaScript Language
+"----------------------------------------------------------
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue'] }
+
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.json,*.css,*.scss,*.less,*.graphql PrettierAsync
+
 call plug#end()
 
 
