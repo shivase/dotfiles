@@ -111,6 +111,7 @@ export PAGER='less'
 export GITHUB_URL=https://github.com/
 export ANDROID_HOME='/usr/local/share/android-sdk'
 source $ZPLUG_HOME/init.zsh
+export GOPATH=$HOME/go
 
 if [[ -z "$LANG" ]]; then
   export LANG='ja_JP.UTF-8'
@@ -129,6 +130,7 @@ path=(
   ./node_modules/.bin
   $ANDROID_HOME/tools
   $ANDROID_HOME/platform-tools
+  $GOPATH/bin
   $path
 )
 
