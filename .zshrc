@@ -127,6 +127,7 @@ path=(
   /usr/local/bin
   /usr/local/sbin
   /usr/local/share/zsh/site-functions(N-/)
+  /usr/local/opt/avr-gcc@7/bin(N-/)
   ./node_modules/.bin
   $ANDROID_HOME/tools
   $ANDROID_HOME/platform-tools
@@ -214,6 +215,9 @@ eval "$(direnv hook zsh)"
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
 [[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
+
+# for compile keyboard1
+export LDFLAGS="-L/usr/local/opt/avr-gcc@7/lib"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
