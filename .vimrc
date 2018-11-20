@@ -80,6 +80,15 @@ Plug 'jistr/vim-nerdtree-tabs'
 Plug 'Xuyuanp/nerdtree-git-plugin' "ファイル変更を通知
 Plug 'airblade/vim-gitgutter'      "ファイル変更時に差分表示
 
+" yank highlight
+Plug 'machakann/vim-highlightedyank'
+
+" indent highlight
+Plug 'nathanaelkane/vim-indent-guides'
+
+" auto formatter
+Plug 'Chiel92/vim-autoformat'
+
 "----------------------------------------------------------
 " NERDTree の設定
 " ---------------------------------------------------------
