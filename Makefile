@@ -4,35 +4,32 @@ DOTFILES_TARGET   := $(wildcard .??*) bin .zlogin .zlogout .zpreztorc .zprofile 
 DOTFILES_DIR      := $(PWD)
 DOTFILES_FILES    := $(filter-out $(DOTFILES_EXCLUDES), $(DOTFILES_TARGET))
 
-all: install
-
-help:
-	@echo "make list           #=> List the files"
-	@echo "make update         #=> Fetch changes"
-	@echo "make deploy         #=> Create symlink"
-	@echo "make init           #=> Setup environment"
-	@echo "make install        #=> Updating, deploying and initializng"
-	@echo "make clean          #=> Remove the dotfiles"
-
-list:
+list: ## list the files to be installed
 	@$(foreach val, $(DOTFILES_FILES), ls -dF $(val);)
 
-update:
+update: ## Fetch changes
 	@DOTPATH=$(PWD) bash $(PWD)/bin/dotfiles_update
 
-deploy:
+deploy: ## Create symlinks to the home folder
 	@echo 'Copyright (c) 2013-2015 BABAROT All Rights Reserved.'
 	@echo '==> Start to deploy dotfiles to home directory.'
 	@echo ''
 	@$(foreach val, $(DOTFILES_FILES), ln -sfnv $(abspath $(val)) $(HOME)/$(val);)
 
-init:
+init:  ## Setup environents
 	@DOTPATH=$(PWD) bash $(PWD)/etc/init/init.sh
 
-install: update deploy init
-	@exec $$SHELL
-
-clean:
+clean: ## Reove the dotfiles
 	@echo 'Remove dot files in your home directory...'
 	@-$(foreach val, $(DOTFILES_FILES), rm -vrf $(HOME)/$(val);)
 	-rm -rf $(DOTFILES_DIR)
+
+all: install ## Updating, deploying and initializing
+
+.PHONY: help
+
+help:
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+.DEFAULT_GOAL := help
+
