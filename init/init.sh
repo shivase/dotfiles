@@ -5,6 +5,8 @@ set -eu
 
 . "$DOTPATH"/etc/lib/vital.sh
 
+CURRENT=`echo $(cd $(dirname $0);pwd)`
+
 if [ -z "$DOTPATH" ]; then
     # shellcheck disable=SC2016
     echo '$DOTPATH not set' >&2
@@ -23,22 +25,6 @@ do
     kill -0 "$$" || exit
 done 2>/dev/null &
 
-e_arrow "init.sh"
-$DOTPATH/etc/init/"$(get_os)"/init.sh
+$DOTPATH/init/"$(get_os)"/init.sh
 
-# shellcheck disable=SC2102
-for i in "$DOTPATH"/etc/init/"$(get_os)"/*[^init].sh
-do
-    if [ -f "$i" ]; then
-        if [ "${DEBUG:-}" = 1 ]; then
-            echo "$i"
-        else
-            e_arrow "$(basename "$i")"
-            bash "$i"
-        fi
-    else
-        continue
-    fi
-done
-
-e_done "$0: Finish!!" | sed "s $DOTPATH \$DOTPATH g"
+$CURRENT/tmux.sh

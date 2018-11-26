@@ -33,9 +33,14 @@ e_done() {
     printf " \033[37;1m%s\033[m...\033[32mOK\033[m\n" "✔ $*"
 }
 
+e_skip() {
+  printf "\033[32mSKIP\033[m\n"
+}
+
 e_arrow() {
     printf " \033[37;1m%s\033[m\n" "➜ $*"
 }
+
 
 e_prompt() {
     printf " \033[37;1m%s\033[m\033[32m → \033[m" "$*"
