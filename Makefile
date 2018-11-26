@@ -4,32 +4,30 @@ DOTFILES_TARGET   := $(wildcard .??*) bin .zlogin .zlogout .zpreztorc .zprofile 
 DOTFILES_DIR      := $(PWD)
 DOTFILES_FILES    := $(filter-out $(DOTFILES_EXCLUDES), $(DOTFILES_TARGET))
 
-list: ## list the files to be installed
-	@$(foreach val, $(DOTFILES_FILES), ls -dF $(val);)
+.DEFAULT_GOAL := help
+.PHONY: help init symlinks update
 
-update: ## Fetch changes
-	@DOTPATH=$(PWD) bash $(PWD)/bin/dotfiles_update
+init:  ## Setup environents
+	@DOTPATH=$(PWD) bash $(PWD)/init/init.sh
 
-deploy: ## Create symlinks to the home folder
-	@echo 'Copyright (c) 2013-2015 BABAROT All Rights Reserved.'
+deploy: ## deploy to the home folder
 	@echo '==> Start to deploy dotfiles to home directory.'
 	@echo ''
 	@$(foreach val, $(DOTFILES_FILES), ln -sfnv $(abspath $(val)) $(HOME)/$(val);)
 
-init:  ## Setup environents
-	@DOTPATH=$(PWD) bash $(PWD)/etc/init/init.sh
+update: ## Fetch changes
+	@DOTPATH=$(PWD) bash $(PWD)/bin/dotfiles_update
 
-clean: ## Reove the dotfiles
-	@echo 'Remove dot files in your home directory...'
-	@-$(foreach val, $(DOTFILES_FILES), rm -vrf $(HOME)/$(val);)
-	-rm -rf $(DOTFILES_DIR)
+install: init deploy update ## Runs init, deploy, update
 
-all: install ## Updating, deploying and initializing
+brew_install: ## install brew targets
+	@cd brew && make install
 
-.PHONY: help
+brew_clean:
+	@cd brew && make clean
 
 help:
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
-
-.DEFAULT_GOAL := help
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
+		| sort \
+		| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
