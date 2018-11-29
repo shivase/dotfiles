@@ -2,7 +2,7 @@
 
 . "$DOTPATH"/etc/lib/vital.sh
 
-DIR=$HOME/.iterm/colors
+DIR=$HOME/iterm/colors
 
 color_schemes() {
   e_prompt "install iterm color schemes to $DIR"
