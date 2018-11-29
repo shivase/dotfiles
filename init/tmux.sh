@@ -4,9 +4,10 @@
 
 tpm() {
   e_prompt "install tpm(tmux plugin manager)"
-  if [ ! -d $HOME/.tmux/plugins/tpm ]; then
-    mkdir -p $HOME/.tmux/plugins
-    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+  TPM_PATH=$HOME/.tmux/plugins
+  if [ ! -d ${TPM_PATH}/tpm ]; then
+    mkdir -p ${TPM_PATH}
+    cd ${TPM_PATH} && git clone https://github.com/tmux-plugins/tpm
   else
     e_skip
   fi
