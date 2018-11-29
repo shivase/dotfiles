@@ -38,5 +38,6 @@ homebrew
 $CURRENT/fonts.sh
 $CURRENT/zsh.sh
 $CURRENT/tmux.sh
+$CURRENT/iterm.sh
 
 e_header "initialize finished."
