@@ -23,29 +23,27 @@ setopt share_history
 # C-sでのヒストリ検索が潰されてしまうため、出力停止・開始用にC-s/C-qを使わない。
 setopt no_flow_control
 
-# コマンドのオプションや引数を補完する
 autoload -Uz compinit && compinit -u
-# URLをエスケープする
 autoload -Uz url-quote-magic
-# VCS情報の表示を有効にする
-autoload -Uz add-zsh-hook
 autoload -Uz vcs_info
-# cdrを有効
-autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook is-at-least
 
 setopt prompt_subst
 
-zstyle ':vcs_info:*' formats '(%s)-[%b]'
-zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
+# git prompt設定
+zstyle ':vcs_info:*' enable git svn hg
+zstyle ':vcs_info:*' formats '(%s)[%b] '
+zstyle ':vcs_info:*' actionformats '(%s)[%b|%a] '
 
-function _update_vcs_info_msg() {
-  psvar=()
-  LANG=US.UTF-8 vcs_info
-  psvar[1]="$vcs_info_msg_0_"
-}
+if is-at-least 4.3.10; then
+  zstyle ':vcs_info:git:*' check-for-changes true
+  zstyle ':vcs_info:git:*' stagedstr "+"
+  zstyle ':vcs_info:git:*' unstagedstr "-"
+  zstyle ':vcs_info:git:*' formats '(%s)[%b]%c%u'
+  zstyle ':vcs_info:git:*' actionformats '(%s)[%b|%a]%c%u'
+fi
 
-add-zsh-hook precmd _update_vcs_info_msg
-RPROMPT="%v"
+zstyle ':vcs_info:bzr:*' use-simple true
 
 # 文字入力時にURLをエスケープする
 zle -N self-insert url-quote-magic
@@ -58,7 +56,6 @@ zstyle ':completion:*' recent-dirs-insert both
 zstyle ':chpwd:*' recent-dirs-max 500
 zstyle ':chpwd:*' recent-dirs-default true
 zstyle ':chpwd:*' recent-dirs-pushd true
-zstyle ':filter-select:highlight' matched fg=yellow,standout
 zstyle ':filter-select' case-insensitive yes
 zstyle ':filter-select' extended-search yes
 
@@ -128,6 +125,7 @@ path=(
   /usr/local/sbin
   /usr/local/share/zsh/site-functions(N-/)
   /usr/local/opt/avr-gcc@7/bin(N-/)
+  /usr/local/opt/mysql-client/bin(N-/)
   ./node_modules/.bin
   $ANDROID_HOME/tools
   $ANDROID_HOME/platform-tools
@@ -148,7 +146,8 @@ zplug "stedolan/jq", from:gh-r, as:command
 zplug "sorin-ionescu/prezto"
 zplug "modules/prompt", from:prezto
 # zstyle は zplug load の前に設定する
-zstyle ':prezto:module:prompt' theme 'paradox'
+zstyle ':prezto:module:prompt' theme 'powerline'
+zstyle ':prezto:module:prompt' pwd-length 'short'
 zplug "junegunn/fzf-bin", \
       from:gh-r, \
       as:command, \
@@ -195,16 +194,12 @@ if [ -d $HOME/.anyenv ] ; then
 fi
 
 # -------------------------------------------------
-# my profiles
-
-for rcfiles in $( ls $HOME/dotfiles/etc/profile/*.sh ); do
-  source $rcfiles
-done
 
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.docker-fzf-completion ] && source ~/.docker-fzf-completion
 export FZF_COMPLETION_TRIGGER="," # default: '**'
 
 # direnv hook
