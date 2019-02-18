@@ -1,0 +1,25 @@
+########
+# main view
+########
+
+# チーム開発しているとよくremoteで更新が入るため手元に同期
+bind main ^r !git pull --rebase
+# revert作業は手早く行う必要があるためバインドして効率化
+bind main V !?git revert %(commit)
+# 任意のリビジョンを再現するためにcheckoutすることが多いためバインド
+bind main C !?git checkout %(commit)
+
+########
+# branch view
+########
+
+# リモートブランチをtrackしつつチェックアウト
+bind branch T !git checkout -t %(branch)
+# カーソル行のブランチを親にして入力した名前のブランチを作成
+bind branch n !git checkout -b %(prompt) %(branch)
+# 不要になったブランチを削除（squash mergeや別リポジトリへのmergeをするワークフロー用）
+bind branch D !?git branch -D %(branch)
+# 不要になったブランチを削除
+bind branch d !?git branch -d %(branch)
+# originへのpush
+bind branch P !git push -u origin %(branch)
