@@ -89,3 +89,5 @@
   required = true
 [homebrew]
   analyticsdisabled = true
+[commit]
+  template = ~/.commit_template
