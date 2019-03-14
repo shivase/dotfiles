@@ -176,8 +176,8 @@ bindkey '^j^r' anyframe-widget-execute-history
 bindkey '^j^g' anyframe-widget-cd-ghq-repository
 bindkey '^j^t' anyframe-widget-tmux-attach
 
-bindkey '^f' forward-word
-bindkey '^b' backward-word
+bindkey '^f' forward-char
+bindkey '^b' backward-char
 bindkey '^d' kill-wor
 
 # Set the default Less options.
@@ -200,6 +200,7 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f ~/.docker-fzf-completion ] && source ~/.docker-fzf-completion
+export DOCKER_BUILDKIT=1
 export FZF_COMPLETION_TRIGGER="," # default: '**'
 
 # direnv hook
@@ -217,3 +218,14 @@ export LDFLAGS="-L/usr/local/opt/avr-gcc@7/lib"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+# -------------------------------------------------
+# user functions
+function history-all { history -E 1 }
+
+# -------------------------------------------------
+# kubernetes
+if [ -d $HOME/.kube ] ; then
+    KUBECONFIG=$HOME/.kube/config
+    source <(kubectl completion zsh)
+    source <(stern --completion=zsh)
+fi
