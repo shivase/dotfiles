@@ -91,3 +91,10 @@
   analyticsdisabled = true
 [commit]
   template = ~/.commit_template
+[diff]
+  renames = true
+  tool = icdiff
+[difftool]
+  prompt = false
+[difftool "icdiff"]
+  cmd = icdiff --line-numbers $LOCAL $REMOTE
