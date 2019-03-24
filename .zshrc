@@ -226,7 +226,13 @@ function history-all { history -E 1 }
 # -------------------------------------------------
 # kubernetes
 if [ -d $HOME/.kube ] ; then
-    KUBECONFIG=$HOME/.kube/config
+    KUBECONFIG=$HOME/.kube/config_st:$HOME/.kube/config_dev kubectl config view --flatten > ~/.kube/config
+    export KUBECONFIG=$HOME/.kube/config
     source <(kubectl completion zsh)
     source <(stern --completion=zsh)
 fi
+
+
+# -------------------------------------------------
+# AWS Command
+alias awsp="source _awsp"
