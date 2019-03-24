@@ -129,9 +129,10 @@ path=(
   ./node_modules/.bin
   $ANDROID_HOME/tools
   $ANDROID_HOME/platform-tools
-  $GOPATH/bin
   $path
 )
+
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
 zplug 'zsh-users/zsh-autosuggestions'
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=250'
