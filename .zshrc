@@ -142,7 +142,7 @@ zplug 'zsh-users/zsh-completions'
 zplug 'mollifier/anyframe'
 zplug "mollifier/cd-gitroot"
 zplug "mrowa44/emojify", as:command
-zplug "b4b4r07/emoji-cli"
+zplug "b4b4r07/emoji-cli", if:"which jq"
 zplug "stedolan/jq", from:gh-r, as:command
 zplug "sorin-ionescu/prezto"
 zplug "modules/prompt", from:prezto
