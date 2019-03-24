@@ -14,7 +14,7 @@ set clipboard+=unnamed
 set ambiwidth=double
 let mapleader = ","              " key map leader <Leader>
 set scrolloff=5                  " スクロール時の余白確保
-set nowrap                       " 自動折り返し不可
+set wrap                         " 自動折り返し不可
 set textwidth=0                  " 一行に長い文章を書いていても自動折り返しをしない
 set nobackup                     " バックアップ取らない
 set autoread                     " 他で書き換えられたら自動で読み直す
@@ -33,6 +33,8 @@ set hlsearch                     " 検索文字ハイライト
 set cursorline                   " カーソルラインをハイライト
 filetype plugin on               " ファイルタイプ判定をon
 syntax enable
+
+set rtp+=/usr/local/opt/fzf
 
 "---------------------------------------
 " vim ショートカット上書き設定
@@ -160,10 +162,18 @@ Plug 'fatih/vim-go'
 "----------------------------------------------------------
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue'] }
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'vue'] }
 
 let g:prettier#autoformat = 0
 autocmd BufWritePre *.js,*.json,*.css,*.scss,*.less,*.graphql PrettierAsync
+
+" Markdown
+"----------------------------------------------------------
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+" FoldingはOFF
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_conceal = 0
 
 call plug#end()
 
