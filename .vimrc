@@ -91,6 +91,9 @@ Plug 'nathanaelkane/vim-indent-guides'
 " auto formatter
 Plug 'Chiel92/vim-autoformat'
 
+" kubernetes helm
+Plug 'mustache/vim-mustache-handlebars'
+
 "----------------------------------------------------------
 " NERDTree の設定
 " ---------------------------------------------------------
@@ -174,6 +177,11 @@ Plug 'plasticboy/vim-markdown'
 " FoldingはOFF
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_conceal = 0
+
+" mustache(for helm)
+"----------------------------------------------------------
+autocmd BufRead,BufNewFile *.tpl setfiletype mustache
+
 
 call plug#end()
 
