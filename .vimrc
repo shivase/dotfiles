@@ -12,7 +12,6 @@ set list
 set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%   " 見えない文字を可視化
 set clipboard+=unnamed
 set ambiwidth=double
-let mapleader = ","              " key map leader <Leader>
 set scrolloff=5                  " スクロール時の余白確保
 set wrap                         " 自動折り返し不可
 set textwidth=0                  " 一行に長い文章を書いていても自動折り返しをしない
@@ -46,6 +45,27 @@ imap <C-p>  <ESC>"*pa
 " Ev/Rvでvimrcの編集と反映
 " command! Ev edit $MYVIMRC
 " command! Rv source $MYVIMRC
+
+
+"----------------------------------------------------------
+" Leader mapping
+"----------------------------------------------------------
+let mapleader = "\<Space>"
+
+" ファイル保存
+nnoremap <Leader>w :w<CR>
+
+" ビジュアルラインモードへの切り替え
+nmap <Leader><Leader> V
+
+" でコードをインデント整形
+map <Leader>i gg=<S-g><C-o><C-o>zz
+
+" 改行なしで1行コピー（\n を含まずに yy）
+noremap <Leader>y 0v$hy
+
+" 置換
+noremap <Leader>s :%s/
 
 "----------------------------------------------------------
 " plugin
@@ -143,8 +163,8 @@ let g:syntastic_check_on_open = 0
 " for ruby checker
 let g:syntastic_ruby_checkers = ['rubocop']
 let g:syntastic_mode_map = { 'mode': 'passive',
-                           \ 'active_filetypes': ['javascript','ruby'],
-                           \ 'passive_filetypes': [] }
+      \ 'active_filetypes': ['javascript','ruby'],
+      \ 'passive_filetypes': [] }
 " 「:wq」で終了する時も構文エラーチェックする
 let g:syntastic_check_on_wq = 1
 
@@ -164,8 +184,8 @@ Plug 'fatih/vim-go'
 " JavaScript Language
 "----------------------------------------------------------
 Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'vue'] }
+      \ 'do': 'yarn install',
+      \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'vue'] }
 
 let g:prettier#autoformat = 0
 autocmd BufWritePre *.js,*.json,*.css,*.scss,*.less,*.graphql PrettierAsync
@@ -182,6 +202,11 @@ let g:vim_markdown_conceal = 0
 "----------------------------------------------------------
 autocmd BufRead,BufNewFile *.tpl setfiletype mustache
 
+" base64
+"   encode: atob
+"   decode: btoa
+"----------------------------------------------------------
+Plug 'christianrondeau/vim-base64'
 
 call plug#end()
 
