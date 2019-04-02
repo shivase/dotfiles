@@ -244,3 +244,17 @@ if [ $SHLVL = 1 ]; then
   alias tmux="tmux attach || tmux new-session \; source-file ~/.tmux/new-session"
   tmux
 fi
+
+# -------------------------------------------------
+# CTRL+Zでバックグラウンドに戻る
+fancy-ctrl-z () {
+  if [[ $#BUFFER -eq 0 ]]; then
+    BUFFER="fg"
+    zle accept-line
+  else
+    zle push-input
+    zle clear-screen
+  fi
+}
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
