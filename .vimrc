@@ -34,7 +34,6 @@ filetype plugin on               " ファイルタイプ判定をon
 syntax enable
 
 set rtp+=/usr/local/opt/fzf
-
 "---------------------------------------
 " vim ショートカット上書き設定
 "---------------------------------------
@@ -113,6 +112,11 @@ Plug 'Chiel92/vim-autoformat'
 
 " kubernetes helm
 Plug 'mustache/vim-mustache-handlebars'
+
+"----------------------------------------------------------
+" Vim Color Scheme
+"----------------------------------------------------------
+Plug 'ayu-theme/ayu-vim'
 
 "----------------------------------------------------------
 " NERDTree の設定
@@ -210,4 +214,16 @@ Plug 'christianrondeau/vim-base64'
 
 call plug#end()
 
-
+" set colorscheme
+"----------------------------------------------------------
+set termguicolors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+let ayucolor="dark"
+colorscheme ayu
+" IndentLine {{
+let g:indentLine_char = '▢'
+let g:indentLine_first_char = '▢'
+let g:indentLine_showFirstIndentLevel = 1
+let g:indentLine_setColors = 0
+" }}
