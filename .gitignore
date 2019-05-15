@@ -10,3 +10,4 @@ TAGS
 *~
 .idea
 .tmux/plugins/tmux-*
+.tmux/resurrect/*
