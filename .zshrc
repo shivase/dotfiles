@@ -27,8 +27,12 @@ autoload -Uz compinit && compinit -u
 autoload -Uz url-quote-magic
 autoload -Uz vcs_info
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook is-at-least
+autoload -U colors
+colors
 
 setopt prompt_subst
+
+setopt complete_in_word
 
 # git prompt設定
 zstyle ':vcs_info:*' enable git svn hg
@@ -53,6 +57,9 @@ add-zsh-hook chpwd chpwd_recent_dirs
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*:*:cdr:*:*' menu selection
 zstyle ':completion:*' recent-dirs-insert both
+zstyle ':completion::complete:*' use-cache true
+zstyle ':completion:*:default' menu select=1
+zstyle ':completion:*' list-colors "${LS_COLORS}"
 zstyle ':chpwd:*' recent-dirs-max 500
 zstyle ':chpwd:*' recent-dirs-default true
 zstyle ':chpwd:*' recent-dirs-pushd true
