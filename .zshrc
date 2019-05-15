@@ -75,6 +75,7 @@ alias ll='ls -l' # ファイルの詳細も表示
 alias lla='ls -la' # -a オプションと -l オプションの組み合わせ
 alias ls='ls -F' # ディレクトリ名の末尾にはスラッシュ、シンボリックリンクの末尾には@というように種類ごとの表示をつけてくれる
 alias ls='ls -v -G' # Gはアウトプットに色を付けてくれる
+alias cgrep="grep --color=always"
 
 # -------------------------------------------------
 # user environment
@@ -107,6 +108,7 @@ export VISUAL='vim'
 export PAGER='less'
 export GITHUB_URL=https://github.com/
 export ANDROID_HOME='/usr/local/share/android-sdk'
+export GREP_OPTIONS='--color=auto'
 source $ZPLUG_HOME/init.zsh
 export GOPATH=$HOME/go
 
@@ -258,3 +260,4 @@ fancy-ctrl-z () {
 }
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
+
