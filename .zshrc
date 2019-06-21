@@ -248,13 +248,6 @@ alias awsp="source _awsp"
 alias aws-whoami="aws sts get-caller-identity --output text --query Arn"
 
 # -------------------------------------------------
-# tmux
-if [ $SHLVL = 1 ]; then
-  alias tmux="tmux attach || tmux new-session \; source-file ~/.tmux/new-session"
-  tmux
-fi
-
-# -------------------------------------------------
 # CTRL+Zでバックグラウンドに戻る
 fancy-ctrl-z () {
   if [[ $#BUFFER -eq 0 ]]; then
@@ -268,3 +261,13 @@ fancy-ctrl-z () {
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 
+# -------------------------------------------------
+# peco
+function peco-history-selection() {
+    BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
+    CURSOR=$#BUFFER
+    zle reset-prompt
+}
+
+zle -N peco-history-selection
+bindkey '^j^p' peco-history-selection
