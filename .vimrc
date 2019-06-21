@@ -45,6 +45,7 @@ imap <C-p>  <ESC>"*pa
 " command! Ev edit $MYVIMRC
 " command! Rv source $MYVIMRC
 
+inoremap <silent> jj <ESC>
 
 "----------------------------------------------------------
 " Leader mapping
