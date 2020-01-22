@@ -32,6 +32,8 @@ autoload -Uz add-zsh-hook
 autoload -Uz vcs_info
 # cdrを有効
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+# プロンプトカラーを有効にする
+autoload -U promptinit; promptinit
 
 setopt prompt_subst
 
@@ -103,7 +105,7 @@ fi
 # zsh plugins
 ###################################################
 
-export ZPLUG_HOME=/usr/local/opt/zplug
+export ZPLUG_HOME=$HOME/.zplug
 export CLICOLOR=1
 export EDITOR='vim'
 export VISUAL='vim'
@@ -146,9 +148,8 @@ zplug "mrowa44/emojify", as:command
 zplug "b4b4r07/emoji-cli"
 zplug "stedolan/jq", from:gh-r, as:command
 zplug "sorin-ionescu/prezto"
-zplug "modules/prompt", from:prezto
-# zstyle は zplug load の前に設定する
-zstyle ':prezto:module:prompt' theme 'paradox'
+zplug mafredri/zsh-async, from:github
+zplug intelfx/pure, use:pure.zsh, from:github, as:theme
 zplug "junegunn/fzf-bin", \
       from:gh-r, \
       as:command, \
@@ -164,8 +165,8 @@ zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "plugins/git", from:oh-my-zsh
 
 if ! zplug check; then
-      zplug install
-    fi
+  zplug install
+fi
 
 zplug load
 
@@ -194,13 +195,6 @@ if [ -d $HOME/.anyenv ] ; then
     eval "$(anyenv init - zsh)"
 fi
 
-# -------------------------------------------------
-# my profiles
-
-for rcfiles in $( ls $HOME/dotfiles/etc/profile/*.sh ); do
-  source $rcfiles
-done
-
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
@@ -221,3 +215,46 @@ export LDFLAGS="-L/usr/local/opt/avr-gcc@7/lib"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+if [ -d $HOME/.anyenv ] ; then
+    eval "$(anyenv init - zsh)"
+fi
+
+# -------------------------------------------------
+# AWS関連
+
+function awsp() {
+  source _awsp
+  echo -n "Enter MFA: "
+  read token
+
+  if expr "$token" : "[0-9]*$" >&/dev/null;then
+      serial=`aws iam list-mfa-devices | jq -r ".MFADevices[0].SerialNumber"`
+      credential=`aws sts get-session-token --serial-number ${serial} --token-code ${token}`
+      if [ $? -eq 0 ];then
+        session_token=`echo ${credential} | jq -r .Credentials.SessionToken`
+        access_key=`echo ${credential} | jq -r .Credentials.AccessKeyId`
+        secret_access=`echo ${credential} | jq -r .Credentials.SecretAccessKey`
+        export AWS_SESSION_TOKEN=${session_token}
+        export AWS_ACCESS_KEY_ID=${access_key}
+        export AWS_SECRET_ACCESS_KEY=${secret_access}
+        echo "Expiration : `echo ${credential} | jq -r .Credentials.Expiration`"
+      fi
+    else
+      echo "Input error. Ignore MFA token"
+  fi
+}
+
+# -------------------------------------------------
+# zsh pure theme settings
+prompt pure
+PURE_PROMPT_SYMBOL=❯
+prompt_aws_profile() {
+  if [ -n "$AWS_PROFILE" ]; then
+    preprompt+=( "%{$fg_bold[blue]%}aws:(%{$fg[yellow]%}${AWS_PROFILE}%{$fg_bold[blue]%})%{$reset_color%}" )
+  fi
+}
+prompt_pure_pieces=(
+  ${prompt_pure_pieces:0:2}
+  prompt_aws_profile
+  ${prompt_pure_pieces:2}
+)

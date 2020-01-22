@@ -11,7 +11,7 @@ brew "binutils"
 brew "fontconfig"
 brew "carthage"
 brew "direnv"
-brew "docker", link: false
+brew "docker"
 brew "libtool"
 brew "git"
 brew "htop"
@@ -26,33 +26,29 @@ brew "telnet"
 brew "tfenv"
 brew "tmux"
 brew "tree"
-brew "vim", args: ["with-override-system-vi"]
+brew "vim"
 brew "watch"
 brew "wget"
 brew "yarn"
 brew "zplug"
 brew "zsh"
 brew "sanemat/font/ricty", args: ["with-powerline"]
+brew "anyenv"
 cask "1password"
 cask "atok"
-cask "docker"
 cask "iterm2"
 cask "karabiner-elements"
 cask "skitch"
-cask "skype"
+cask "mattermost"
+cask "dropbox"
+cask "slack"
+cask "kindle"
 mas "Alfred", id: 405843582
-mas "ATOKPad", id: 460883588
-mas "File Viewer", id: 495987613
-mas "GarageBand", id: 682658836
-mas "iMovie", id: 408981434
 mas "Keynote", id: 409183694
 mas "LINE", id: 539883307
-mas "Mini Calendar", id: 1088779979
-mas "Monosnap", id: 540348655
 mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "Simplenote", id: 692867256
 mas "The Unarchiver", id: 425424353
 mas "Twitterrific", id: 1289378661
-mas "Wunderlist", id: 410628904
 mas "Xcode", id: 497799835

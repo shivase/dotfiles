@@ -17,27 +17,23 @@ homebrew() {
   fi
 }
 
-change_hostname() {
-  e_prompt "changing hostname"
-  hostname=`scutil --get ComputerName`
-  if [ ! "$hostname" = "kegamin" ]; then
-    sudo scutil --set ComputerName kegamin
-    sudo scutil --set LocalHostName kegamin
-    e_success "changed hostname"
-  else
-    e_skip
-  fi
+brew_install() {
+  e_prompt "brew install start"
+  brew install zsh
+  brew install zplug
+  brew install wget
+  brew uninstall macvim
+  brew install vim
+  e_prompt "brew install finished"
 }
 
 e_header "initializing"
 
-
-change_hostname
 homebrew
+brew_install
 
 $CURRENT/fonts.sh
 $CURRENT/zsh.sh
-$CURRENT/tmux.sh
 $CURRENT/iterm.sh
 
 e_header "initialize finished."
