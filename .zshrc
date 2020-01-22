@@ -256,8 +256,18 @@ prompt_aws_profile() {
     preprompt+=( "%{$fg_bold[blue]%}aws:(%{$fg[yellow]%}${AWS_PROFILE}%{$fg_bold[blue]%})%{$reset_color%}" )
   fi
 }
+
+prompt_k8s_profile() {
+  if [ -n "$K8S" ]; then
+    local NAMESPACE=`kubens -c`
+    local CONTEXT=`kubectx -c | rev | cut -d '/' -f1 | rev`
+    preprompt+=( "%{$fg_bold[blue]%}k8s:(%{$fg[yellow]%}${CONTEXT}:${NAMESPACE}%{$fg_bold[blue]%})%{$reset_color%}" )
+  fi
+}
+
 prompt_pure_pieces=(
   ${prompt_pure_pieces:0:2}
   prompt_aws_profile
+  prompt_k8s_profile
   ${prompt_pure_pieces:2}
 )
