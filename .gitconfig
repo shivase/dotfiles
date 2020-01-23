@@ -25,7 +25,7 @@
 [pull]
   rebase = true
 [init]
-  templatedir = ~/dotfiles/etc/git_hook
+  templatedir = ~/dotfiles/etc/git_hook/.commit_template
 [alias]
   # https://github.com/gggritso/dotfiles/blob/master/gitconfig.symlink
   st = status
