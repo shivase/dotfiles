@@ -162,9 +162,17 @@ Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue'] }
 
+
+" SQLLanguage
+"----------------------------------------------------------
+" :SQLUFormatter
+Plug 'vim-scripts/Align'
+Plug 'vim-scripts/SQLUtilities'
+
 let g:prettier#autoformat = 0
 autocmd BufWritePre *.js,*.json,*.css,*.scss,*.less,*.graphql PrettierAsync
 
 call plug#end()
+
 
 
