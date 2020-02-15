@@ -89,3 +89,7 @@
   required = true
 [homebrew]
   analyticsdisabled = true
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
