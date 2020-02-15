@@ -45,6 +45,7 @@ cask "dropbox"
 cask "slack"
 cask "kindle"
 cask "google-chrome"
+cask "onedrive"
 cask "free-download-manager"
 mas "Alfred", id: 405843582
 mas "Keynote", id: 409183694
