@@ -32,13 +32,11 @@ autoload -Uz add-zsh-hook
 autoload -Uz vcs_info
 # cdrを有効
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
-# プロンプトカラーを有効にする
-autoload -U promptinit; promptinit
 
 setopt prompt_subst
 
-zstyle ':vcs_info:*' formats '(%s)-[%b]'
-zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
+#zstyle ':vcs_info:*' formats '(%s)-[%b]'
+#zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
 
 function _update_vcs_info_msg() {
   psvar=()
@@ -80,6 +78,7 @@ alias ll='ls -l' # ファイルの詳細も表示
 alias lla='ls -la' # -a オプションと -l オプションの組み合わせ
 alias ls='ls -F' # ディレクトリ名の末尾にはスラッシュ、シンボリックリンクの末尾には@というように種類ごとの表示をつけてくれる
 alias ls='ls -v -G' # Gはアウトプットに色を付けてくれる
+alias grep='rg --hidden -p'
 
 # -------------------------------------------------
 # user environment
@@ -148,8 +147,8 @@ zplug "mrowa44/emojify", as:command
 zplug "b4b4r07/emoji-cli"
 zplug "stedolan/jq", from:gh-r, as:command
 zplug "sorin-ionescu/prezto"
-zplug mafredri/zsh-async, from:github
-zplug intelfx/pure, use:pure.zsh, from:github, as:theme
+zplug "mafredri/zsh-async", from:github
+zplug "intelfx/pure", use:pure.zsh, from:github, as:theme
 zplug "junegunn/fzf-bin", \
       from:gh-r, \
       as:command, \
@@ -186,6 +185,12 @@ bindkey '^d' kill-wor
 # Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
 # Remove -X and -F (exit if the content fits on one screen) to enable it.
 export LESS='-F -g -i -M -R -S -w -X -z-4'
+
+
+# -------------------------------------------------
+# fpath
+fpath=( "$HOME/.zfunctions" $fpath )
+
 
 # -------------------------------------------------
 # anyenv
@@ -249,6 +254,8 @@ function awsp() {
 
 # -------------------------------------------------
 # zsh pure theme settings
+autoload -U promptinit; promptinit
+
 prompt pure
 PURE_PROMPT_SYMBOL=❯
 prompt_aws_profile() {
