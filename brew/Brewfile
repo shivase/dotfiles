@@ -34,7 +34,7 @@ brew "zplug"
 brew "zsh"
 brew "sanemat/font/ricty", args: ["with-powerline"]
 brew "anyenv"
-grew "ripgrep"
+brew "ripgrep"
 cask "1password"
 cask "atok"
 cask "iterm2"
