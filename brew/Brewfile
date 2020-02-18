@@ -49,6 +49,7 @@ cask "google-chrome"
 cask "microsoft-office"
 cask "free-download-manager"
 cask "garmin-express"
+cask "parallels"
 mas "Alfred", id: 405843582
 mas "Keynote", id: 409183694
 mas "LINE", id: 539883307
