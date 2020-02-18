@@ -51,6 +51,7 @@ cask "free-download-manager"
 cask "garmin-express"
 cask "parallels"
 cask "parallels-toolbox"
+cask "parallels-access"
 cask "dash"
 mas "Alfred", id: 405843582
 mas "Keynote", id: 409183694
