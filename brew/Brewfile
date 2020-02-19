@@ -55,7 +55,6 @@ cask "parallels-access"
 cask "dash"
 cask "adguard"
 cask "jetbrains-toolbox"
-mas "Alfred", id: 405843582
 mas "Keynote", id: 409183694
 mas "LINE", id: 539883307
 mas "Numbers", id: 409203825
