@@ -29,7 +29,7 @@ autoload -Uz compinit && compinit -u
 autoload -Uz url-quote-magic
 # VCS情報の表示を有効にする
 autoload -Uz add-zsh-hook
-autoload -Uz vcs_info
+#autoload -Uz vcs_info
 # cdrを有効
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 
@@ -38,14 +38,14 @@ setopt prompt_subst
 #zstyle ':vcs_info:*' formats '(%s)-[%b]'
 #zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
 
-function _update_vcs_info_msg() {
-  psvar=()
-  LANG=US.UTF-8 vcs_info
-  psvar[1]="$vcs_info_msg_0_"
-}
-
-add-zsh-hook precmd _update_vcs_info_msg
-RPROMPT="%v"
+#function _update_vcs_info_msg() {
+#  psvar=()
+#  LANG=US.UTF-8 vcs_info
+#  psvar[1]="$vcs_info_msg_0_"
+#}
+#
+#add-zsh-hook precmd _update_vcs_info_msg
+#RPROMPT="%v"
 
 # 文字入力時にURLをエスケープする
 zle -N self-insert url-quote-magic
@@ -137,7 +137,7 @@ path=(
 )
 
 zplug 'zsh-users/zsh-autosuggestions'
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=250'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'
 
 zplug 'zsh-users/zsh-syntax-highlighting', defer:2
 zplug 'zsh-users/zsh-completions'
@@ -190,7 +190,7 @@ export LESS='-F -g -i -M -R -S -w -X -z-4'
 # -------------------------------------------------
 # fpath
 fpath=( "$HOME/.zfunctions" $fpath )
-
+fpath=(/usr/local/share/zsh-completions $fpath)
 
 # -------------------------------------------------
 # anyenv
