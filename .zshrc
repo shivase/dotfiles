@@ -78,7 +78,7 @@ alias ll='ls -l' # ファイルの詳細も表示
 alias lla='ls -la' # -a オプションと -l オプションの組み合わせ
 alias ls='ls -F' # ディレクトリ名の末尾にはスラッシュ、シンボリックリンクの末尾には@というように種類ごとの表示をつけてくれる
 alias ls='ls -v -G' # Gはアウトプットに色を付けてくれる
-alias grep='rg --hidden -p'
+alias greps='rg --hidden -p'
 
 # -------------------------------------------------
 # user environment
