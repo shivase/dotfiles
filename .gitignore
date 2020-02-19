@@ -10,3 +10,4 @@ TAGS
 *~
 .idea
 .tmux/plugins/tmux-*
+brew/Brewfile.lock.json
