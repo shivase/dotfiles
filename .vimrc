@@ -160,8 +160,10 @@ Plug 'fatih/vim-go'
 "----------------------------------------------------------
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue'] }
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql','vue'] }
 
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.json,*.css,*.scss,*.less,*.graphql PrettierAsync
 
 " SQLLanguage
 "----------------------------------------------------------
@@ -169,10 +171,12 @@ Plug 'prettier/vim-prettier', {
 Plug 'vim-scripts/Align'
 Plug 'vim-scripts/SQLUtilities'
 
-let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.json,*.css,*.scss,*.less,*.graphql PrettierAsync
+
+" Markdown
+"----------------------------------------------------------
+Plug 'tpope/vim-markdown'
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
+let g:markdown_syntax_conceal = 0 " シンタックスを隠さない
+let g:markdown_minlines = 300
 
 call plug#end()
-
-
-
