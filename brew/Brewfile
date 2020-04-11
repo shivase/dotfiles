@@ -59,6 +59,7 @@ cask "vlc"
 cask "bettertouchtool"
 cask "spotify"
 cask "simplenote"
+cask "scrivener"
 mas "Keynote", id: 409183694
 mas "LINE", id: 539883307
 mas "Numbers", id: 409203825
