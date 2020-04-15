@@ -56,6 +56,8 @@ cask "adguard"
 cask "jetbrains-toolbox"
 cask "qmk-toolbox"
 cask "vlc"
+cask "bettertouchtool"
+cask "spotify"
 mas "Keynote", id: 409183694
 mas "LINE", id: 539883307
 mas "Numbers", id: 409203825
