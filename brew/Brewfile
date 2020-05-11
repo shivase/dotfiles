@@ -46,7 +46,6 @@ cask "dropbox"
 cask "slack"
 cask "kindle"
 cask "google-chrome"
-cask "microsoft-office"
 cask "free-download-manager"
 cask "garmin-express"
 cask "parallels"
@@ -74,3 +73,4 @@ mas "Xcode", id: 497799835
 mas "EdgeViewer 2", id:  1206246482
 mas "BetterSnapTool", id:  417375580
 mas "Ulysses", id:  1225570693
+mas "Just Focus", id: 1142151959
