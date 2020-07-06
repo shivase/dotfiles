@@ -171,6 +171,9 @@ autocmd BufWritePre *.js,*.json,*.css,*.scss,*.less,*.graphql PrettierAsync
 Plug 'vim-scripts/Align'
 Plug 'vim-scripts/SQLUtilities'
 
+" GraphQL
+"----------------------------------------------------------
+Plug 'jparise/vim-graphql'
 
 " Markdown
 "----------------------------------------------------------
@@ -180,3 +183,4 @@ let g:markdown_syntax_conceal = 0 " シンタックスを隠さない
 let g:markdown_minlines = 300
 
 call plug#end()
+
