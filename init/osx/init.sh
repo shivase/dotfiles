@@ -19,10 +19,10 @@ homebrew() {
 
 brew_install() {
   e_prompt "brew install start"
+  brew upgrade
   brew install zsh
   brew install zplug
   brew install wget
-  brew uninstall macvim
   brew install vim
   e_prompt "brew install finished"
 }
