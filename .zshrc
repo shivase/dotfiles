@@ -110,7 +110,7 @@ export EDITOR='vim'
 export VISUAL='vim'
 export PAGER='less'
 export GITHUB_URL=https://github.com/
-export ANDROID_HOME='/usr/local/share/android-sdk'
+export ANDROID_HOME=$HOME/Library/Android/sdk
 source $ZPLUG_HOME/init.zsh
 export GOPATH=$HOME/go
 
