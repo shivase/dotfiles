@@ -130,6 +130,7 @@ path=(
   /usr/local/share/zsh/site-functions(N-/)
   /usr/local/opt/avr-gcc@7/bin(N-/)
   ./node_modules/.bin
+  $ANDROID_HOME/emulator
   $ANDROID_HOME/tools
   $ANDROID_HOME/platform-tools
   $GOPATH/bin
