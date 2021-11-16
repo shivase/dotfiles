@@ -156,6 +156,10 @@ let g:terraform_fmt_on_save = 1
 "----------------------------------------------------------
 Plug 'fatih/vim-go'
 
+" Flutter Language
+"----------------------------------------------------------
+Plug 'dart-lang/dart-vim-plugin'
+
 " JavaScript Language
 "----------------------------------------------------------
 Plug 'prettier/vim-prettier', {
