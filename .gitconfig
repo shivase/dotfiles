@@ -2,10 +2,12 @@
   # 環境ごとに違う設定はここに定義する
   path = ~/.gitconfig.local
 [user]
+	name = shivase
+	email = keitti05@gmail.com
 #  email =
 #  name  =
 [github]
-  user = kegamin
+  user = shivase
 [ghq] # https://github.com/motemen/ghq
   root = ~/repo
 [color]
