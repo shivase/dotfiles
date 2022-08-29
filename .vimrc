@@ -120,10 +120,6 @@ let g:airline#extensions#tabline#show_splits = 0
 let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#show_close_button = 0
 
-Plug 'tpope/vim-fugitive'
-" ブランチ情報を表示する
-let g:airline#extensions#branch#enabled = 1
-
 " 構文エラーチェック
 "----------------------------------------------------------
 Plug 'scrooloose/syntastic'
