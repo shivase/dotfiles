@@ -182,5 +182,8 @@ let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
 let g:markdown_syntax_conceal = 0 " シンタックスを隠さない
 let g:markdown_minlines = 300
 
+Plug 'elzr/vim-json'
+let g:vim_json_syntax_conceal = 0
+
 call plug#end()
 
