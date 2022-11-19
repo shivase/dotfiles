@@ -8,22 +8,14 @@ tap "homebrew/cask-fonts"
 tap "sanemat/font"
 brew "autoconf"
 brew "automake"
-brew "awscli"
-brew "binutils"
 brew "fontconfig"
-brew "carthage"
-brew "direnv"
-brew "docker"
 brew "libtool"
-brew "git"
 brew "htop"
 brew "httpie"
 brew "jq"
 brew "mas"
-brew "md5sha1sum"
 brew "nkf"
 brew "qt"
-brew "reattach-to-user-namespace"
 brew "telnet"
 brew "tfenv"
 brew "tmux"
@@ -37,39 +29,10 @@ brew "zsh"
 brew "sanemat/font/ricty", args: ["with-powerline"]
 brew "anyenv"
 brew "ripgrep"
-cask "1password"
-cask "atok"
-cask "iterm2"
-cask "karabiner-elements"
-cask "skitch"
-cask "mattermost"
+brew "php"
 cask "dropbox"
 cask "kindle"
-cask "google-chrome"
 cask "free-download-manager"
-cask "garmin-express"
 cask "dash"
-cask "adguard"
-cask "jetbrains-toolbox"
-cask "qmk-toolbox"
 cask "vlc"
-cask "bettertouchtool"
-cask "simplenote"
-cask "scrivener"
-cask "omnioutliner"
-cask "omnifocus"
-cask "font-fira-code"
-cask "notion"
-cask "GrandPerspective"
-mas "Keynote", id: 409183694
-mas "LINE", id: 539883307
-mas "Numbers", id: 409203825
-mas "Pages", id: 409201541
-mas "Simplenote", id: 692867256
-mas "The Unarchiver", id: 425424353
-mas "Twitterrific", id: 1289378661
-mas "Xcode", id: 497799835
-mas "EdgeViewer 2", id:  1206246482
-mas "BetterSnapTool", id:  417375580
-mas "Ulysses", id:  1225570693
-mas "Just Focus", id: 1142151959
+
