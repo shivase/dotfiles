@@ -14,7 +14,7 @@
   ui = true
 [core]
   autocrlf = false
-  editor = /usr/bin/vim
+  editor = vim
   precomposeunicode = true
   excludesfile = ~/.gitignore
 [push]

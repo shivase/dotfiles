@@ -33,6 +33,8 @@ typeset -gU cdpath fpath mailpath path
 #   $cdpath
 # )
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # Set the list of directories that Zsh searches for programs.
 # (N-/): 存在しないディレクトリは登録しない。
 path=(
