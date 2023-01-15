@@ -110,7 +110,6 @@ export EDITOR='vim'
 export VISUAL='vim'
 export PAGER='less'
 export GITHUB_URL=https://github.com/
-export ANDROID_HOME=$HOME/Library/Android/sdk
 source $ZPLUG_HOME/init.zsh
 export GOPATH=$HOME/go
 
@@ -124,17 +123,13 @@ path=(
   $HOME/.anyenv/bin              # anyenv(plenv,ndenv,rbenv...)
   $GOPATH/bin                    # Go
   /Library/TeX/texbin(N-/)
-  /opt/homebrew/bin
+  /opt/homebrew/bin(N-/)
+  /opt/homebrew/sbin(N-/)
   /usr/local/heroku/bin(N-/)     # heroku toolbelt
   /usr/local/bin
   /usr/local/sbin
   /usr/local/share/zsh/site-functions(N-/)
   /usr/local/opt/avr-gcc@7/bin(N-/)
-  ./node_modules/.bin
-  $ANDROID_HOME/emulator
-  $ANDROID_HOME/tools
-  $ANDROID_HOME/platform-tools
-  $GOPATH/bin
   $path
 )
 
@@ -142,22 +137,19 @@ zplug 'zsh-users/zsh-autosuggestions'
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'
 
 zplug 'zsh-users/zsh-syntax-highlighting', defer:2
-zplug 'zsh-users/zsh-completions'
 zplug 'mollifier/anyframe'
 zplug "mollifier/cd-gitroot"
 zplug "mrowa44/emojify", as:command
 zplug "b4b4r07/emoji-cli"
 zplug "sorin-ionescu/prezto"
-zplug "mafredri/zsh-async", from:github
-#zplug "intelfx/pure", use:pure.zsh, from:github, as:theme
 zplug "b4b4r07/enhancd", use:enhancd.sh
-# Tracks your most used directories, based on 'frecency'.
 zplug "rupa/z", use:"*.sh"
 # for MacOS
 zplug "modules/osx", from:prezto, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "plugins/git", from:oh-my-zsh
 zplug "woefe/git-prompt.zsh"
+zplug "wbingli/zsh-wakatime"
 
 if ! zplug check; then
   zplug install
@@ -184,9 +176,14 @@ export LESS='-F -g -i -M -R -S -w -X -z-4'
 
 
 # -------------------------------------------------
-# fpath
-fpath=( "$HOME/.zfunctions" $fpath )
-fpath=(/usr/local/share/zsh-completions $fpath)
+# zsh-completions
+
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+  source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  autoload -Uz compinit && compinit
+fi
+
 
 # -------------------------------------------------
 # anyenv
@@ -216,6 +213,13 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 if [ -d $HOME/.anyenv ] ; then
     eval "$(anyenv init - zsh)"
+fi
+
+# Google Cloud SDK
+
+if [ -d /opt/homebrew/Caskroom/google-cloud-sdk ]; then
+    source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+    source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
 fi
 
 # -------------------------------------------------
