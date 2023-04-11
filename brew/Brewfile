@@ -30,6 +30,8 @@ brew "sanemat/font/ricty", args: ["with-powerline"]
 brew "anyenv"
 brew "ripgrep"
 brew "php"
+brew "exa"
+brew "bat"
 cask "dropbox"
 cask "kindle"
 cask "free-download-manager"
