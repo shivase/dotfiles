@@ -71,13 +71,10 @@ if (( ${+commands[vim]} )); then
   alias vi='vim'
 fi
 
-alias la='ls -a' # dot(.)で始まるディレクトリ、ファイルも表示
-alias la='ls -al' # -a オプションと -l オプションの組み合わせ
-alias ll='ls -lav'
-alias ll='ls -l' # ファイルの詳細も表示
-alias lla='ls -la' # -a オプションと -l オプションの組み合わせ
-alias ls='ls -F' # ディレクトリ名の末尾にはスラッシュ、シンボリックリンクの末尾には@というように種類ごとの表示をつけてくれる
-alias ls='ls -v -G' # Gはアウトプットに色を付けてくれる
+alias ls='exa'
+alias ll='exa -l'
+alias la='exa -a'
+alias cat='bat'
 alias greps='rg --hidden -p'
 
 # -------------------------------------------------
@@ -112,6 +109,9 @@ export PAGER='less'
 export GITHUB_URL=https://github.com/
 source $ZPLUG_HOME/init.zsh
 export GOPATH=$HOME/go
+export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
+
 
 if [[ -z "$LANG" ]]; then
   export LANG='ja_JP.UTF-8'
@@ -130,6 +130,7 @@ path=(
   /usr/local/sbin
   /usr/local/share/zsh/site-functions(N-/)
   /usr/local/opt/avr-gcc@7/bin(N-/)
+  /opt/homebrew/opt/llvm/bin(N-/)
   $path
 )
 
@@ -144,12 +145,14 @@ zplug "b4b4r07/emoji-cli"
 zplug "sorin-ionescu/prezto"
 zplug "b4b4r07/enhancd", use:enhancd.sh
 zplug "rupa/z", use:"*.sh"
+zplug "wbingli/zsh-wakatime"
+zplug "plugins/git", from:oh-my-zsh
+zplug "woefe/git-prompt.zsh"
+zplug "mafredri/zsh-async", from:github
+zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 # for MacOS
 zplug "modules/osx", from:prezto, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
-zplug "plugins/git", from:oh-my-zsh
-zplug "woefe/git-prompt.zsh"
-zplug "wbingli/zsh-wakatime"
 
 if ! zplug check; then
   zplug install
@@ -224,29 +227,18 @@ fi
 
 # -------------------------------------------------
 # zsh pure theme settings
-#autoload -U promptinit; promptinit
-#
-#prompt pure
-#PURE_PROMPT_SYMBOL=❯
-#prompt_aws_profile() {
-#  if [ -n "$AWS_PROFILE" ]; then
-#    preprompt+=( "%{$fg_bold[blue]%}aws:(%{$fg[yellow]%}${AWS_PROFILE}%{$fg_bold[blue]%})%{$reset_color%}" )
-#  fi
-#}
-#
-#prompt_k8s_profile() {
-#  if [ -n "$K8S" ]; then
-#    local NAMESPACE=`kubens -c`
-#    local CONTEXT=`kubectx -c | rev | cut -d '/' -f1 | rev`
-#    preprompt+=( "%{$fg_bold[blue]%}k8s:(%{$fg[yellow]%}${CONTEXT}:${NAMESPACE}%{$fg_bold[blue]%})%{$reset_color%}" )
-#  fi
-#}
-#
-#prompt_pure_pieces=(
-#  ${prompt_pure_pieces:0:2}
-#  prompt_aws_profile
-#  prompt_k8s_profile
-#  ${prompt_pure_pieces:2}
-#)
+fpath+=("$(brew --prefix)/share/zsh/site-functions")
+autoload -U promptinit; promptinit
+
+prompt pure
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+autoload -U +X bashcompinit && bashcompinit
+
+if [ -f /opt/homebrew/bin/terraform ]; then
+  complete -o nospace -C /opt/homebrew/bin/terraform terraform
+fi
+
+zstyle ':completion:*' menu select
+fpath+=~/.zfunc
