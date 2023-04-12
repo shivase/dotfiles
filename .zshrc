@@ -74,7 +74,6 @@ fi
 alias ls='exa'
 alias ll='exa -l'
 alias la='exa -a'
-alias cat='bat'
 alias greps='rg --hidden -p'
 
 # -------------------------------------------------
