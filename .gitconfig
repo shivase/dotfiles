@@ -67,6 +67,7 @@
   unmerged = diff --name-only --diff-filter=U
 	staash = stash --all
 	bb = !$HOME/dotfiles/bin/better-git-branch.sh
+	pushf = push --force-with-lease
 [credential]
   helper = osxkeychain
   #helper = cache --timeout=216000
@@ -102,3 +103,7 @@
 	prompt = false
 [column]
 	ui = auto
+[rerere]
+	enabled = true
+[fetch]
+	writeCommitGraph = true
