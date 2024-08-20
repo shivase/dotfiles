@@ -11,12 +11,13 @@
 [ghq] # https://github.com/motemen/ghq
   root = ~/repo
 [color]
-  ui = true
+	ui = auto
 [core]
   autocrlf = false
   editor = vim
   precomposeunicode = true
   excludesfile = ~/.gitignore
+	ignorecase = false
 [push]
   default = current
 [branch]
@@ -64,6 +65,8 @@
   filetrail = git log --follow -p -w
   mergetrail = log --ancestry-path --merges
   unmerged = diff --name-only --diff-filter=U
+	staash = stash --all
+	bb = !$HOME/dotfiles/bin/better-git-branch.sh
 [credential]
   helper = osxkeychain
   #helper = cache --timeout=216000
