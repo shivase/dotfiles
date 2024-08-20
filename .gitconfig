@@ -3,7 +3,7 @@
   path = ~/.gitconfig.local
 [user]
 	name = shivase
-	email = shivase@ymail.ne.jp
+	email = shivase@legiotech.jp
 #  email =
 #  name  =
 [github]
@@ -21,6 +21,7 @@
   default = current
 [branch]
   autosetuprebase = always
+	sort = -committerdate
 [merge]
   ff = false
   conflictstyle = diff3
@@ -28,6 +29,7 @@
   rebase = true
 [init]
   templatedir = ~/dotfiles/etc/git_hook/.commit_template
+	defaultBranch = main
 [alias]
   # https://github.com/gggritso/dotfiles/blob/master/gitconfig.symlink
   st = status
@@ -95,3 +97,5 @@
 	tool = vimdiff
 [difftool]
 	prompt = false
+[column]
+	ui = auto
