@@ -35,6 +35,7 @@ autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 
 setopt prompt_subst
 
+
 #zstyle ':vcs_info:*' formats '(%s)-[%b]'
 #zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
 
@@ -153,6 +154,7 @@ zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 # for MacOS
 zplug "modules/osx", from:prezto, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
+zplug "spaceship-prompt/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
 
 if ! zplug check; then
   zplug install
@@ -230,7 +232,8 @@ fi
 fpath+=("$(brew --prefix)/share/zsh/site-functions")
 autoload -U promptinit; promptinit
 
-prompt pure
+#prompt pure
+prompt spaceship
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
