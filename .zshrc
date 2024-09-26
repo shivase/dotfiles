@@ -120,7 +120,6 @@ path=(
   /Applications/TeXLive/Library/mactexaddons
   $HOME/dotfiles/bin             # original dotfiles bin
   $HOME/.cabal/bin               # haskel package manager
-  $HOME/.anyenv/bin              # anyenv(plenv,ndenv,rbenv...)
   $GOPATH/bin                    # Go
   /opt/homebrew/bin(N-/)
   /opt/homebrew/sbin(N-/)
@@ -190,14 +189,6 @@ if type brew &>/dev/null; then
 fi
 
 
-# -------------------------------------------------
-# anyenv
-# https://github.com/riywo/anyenv
-
-if [ -d $HOME/.anyenv ] ; then
-    eval "$(anyenv init - zsh)"
-fi
-
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
@@ -216,16 +207,12 @@ export LDFLAGS="-L/usr/local/opt/avr-gcc@7/lib"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-if [ -d $HOME/.anyenv ] ; then
-    eval "$(anyenv init - zsh)"
-fi
-
 # Google Cloud SDK
-
-if [ -d /opt/homebrew/Caskroom/google-cloud-sdk ]; then
-    source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
-    source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-fi
+#
+#if [ -d /opt/homebrew/Caskroom/google-cloud-sdk ]; then
+#    source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+#    source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+#fi
 
 # -------------------------------------------------
 # zsh pure theme settings
@@ -233,7 +220,7 @@ fpath+=("$(brew --prefix)/share/zsh/site-functions")
 autoload -U promptinit; promptinit
 
 #prompt pure
-prompt spaceship
+#prompt spaceship
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -387,3 +374,18 @@ ghce() {
 	GH_DEBUG="$GH_DEBUG" gh copilot explain "$@"
 }
 
+alias awsp=aws_profile_update
+
+function aws_profile_update() {
+
+   PROFILES=$(aws configure list-profiles)
+   PROFILES_ARRAY=($(echo $PROFILES))
+   SELECTED_PROFILE=$(echo $PROFILES | peco)
+
+   [[ -n ${PROFILES_ARRAY[(re)${SELECTED_PROFILE}]} ]] && export AWS_PROFILE=${SELECTED_PROFILE}; echo 'Updated profile' || echo ''
+
+}
+
+export STARSHIP_CONFIG=~/dotfiles/starship.toml
+eval "$(starship init zsh)"
+eval "$(mise activate zsh)"
