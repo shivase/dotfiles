@@ -106,7 +106,6 @@ export VISUAL='vim'
 export PAGER='less'
 export GITHUB_URL=https://github.com/
 source $ZPLUG_HOME/init.zsh
-export GOPATH=$HOME/go
 export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
 
@@ -120,7 +119,6 @@ path=(
   /Applications/TeXLive/Library/mactexaddons
   $HOME/dotfiles/bin             # original dotfiles bin
   $HOME/.cabal/bin               # haskel package manager
-  $GOPATH/bin                    # Go
   /opt/homebrew/bin(N-/)
   /opt/homebrew/sbin(N-/)
   /usr/local/heroku/bin(N-/)     # heroku toolbelt
@@ -149,7 +147,6 @@ zplug "wbingli/zsh-wakatime"
 zplug "plugins/git", from:oh-my-zsh
 zplug "woefe/git-prompt.zsh"
 zplug "mafredri/zsh-async", from:github
-zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 # for MacOS
 zplug "modules/osx", from:prezto, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
@@ -189,19 +186,6 @@ if type brew &>/dev/null; then
 fi
 
 
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-
-# direnv hook
-eval "$(direnv hook zsh)"
-
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
-[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
-[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
-
 # for compile keyboard1
 export LDFLAGS="-L/usr/local/opt/avr-gcc@7/lib"
 
@@ -213,14 +197,6 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 #    source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 #    source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
 #fi
-
-# -------------------------------------------------
-# zsh pure theme settings
-fpath+=("$(brew --prefix)/share/zsh/site-functions")
-autoload -U promptinit; promptinit
-
-#prompt pure
-#prompt spaceship
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -235,157 +211,147 @@ fpath+=~/.zfunc
 
 complete -o nospace -C /opt/homebrew/Cellar/tfenv/3.0.0/versions/1.3.7/terraform terraform
 
-# bun completions
-[ -s "/Users/shivase/.bun/_bun" ] && source "/Users/shivase/.bun/_bun"
+#source ~/.config/op/plugins.sh
 
-source ~/.config/op/plugins.sh
+#alias awsp=aws_profile_update
 
-# Github Copilot
-ghcs() {
-	FUNCNAME="$funcstack[1]"
-	TARGET="shell"
-	local GH_DEBUG="$GH_DEBUG"
+#function aws_profile_update() {
+#
+#   PROFILES=$(aws configure list-profiles)
+#   PROFILES_ARRAY=($(echo $PROFILES))
+#   SELECTED_PROFILE=$(echo $PROFILES | peco)
+#
+#   [[ -n ${PROFILES_ARRAY[(re)${SELECTED_PROFILE}]} ]] && export AWS_PROFILE=${SELECTED_PROFILE}; echo 'Updated profile' || echo ''
+#
+#}
 
-	read -r -d '' __USAGE <<-EOF
-	Wrapper around \`gh copilot suggest\` to suggest a command based on a natural language description of the desired output effort.
-	Supports executing suggested commands if applicable.
+eval "$(mise activate zsh --shims)"
+if command -v starship &> /dev/null; then
+  eval "$(starship completions zsh)"
+  eval "$(starship init zsh)"
+fi
 
-	USAGE
-	  $FUNCNAME [flags] <prompt>
+# gcloud completion
+source /opt/homebrew/share/zsh/site-functions/_google-cloud-sdk
 
-	FLAGS
-	  -d, --debug              Enable debugging
-	  -h, --help               Display help usage
-	  -t, --target target      Target for suggestion; must be shell, gh, git
-	                           default: "$TARGET"
+# Added by Windsurf
+export PATH="/Users/shivase/.codeium/windsurf/bin:$PATH"
 
-	EXAMPLES
+function peco-src () {
+  local selected_dir=$(ghq list -p | peco --prompt="repositories >" --query "$LBUFFER")
+  if [ -n "$selected_dir" ]; then
+    BUFFER="cd ${selected_dir}"
+    zle accept-line
+  fi
+  zle clear-screen
+}
+zle -N peco-src
+bindkey '^]' peco-src
 
-	- Guided experience
-	  $ $FUNCNAME
+# pnpm
+export PNPM_HOME="/Users/shivase/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
 
-	- Git use cases
-	  $ $FUNCNAME -t git "Undo the most recent local commits"
-	  $ $FUNCNAME -t git "Clean up local branches"
-	  $ $FUNCNAME -t git "Setup LFS for images"
+PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
-	- Working with the GitHub CLI in the terminal
-	  $ $FUNCNAME -t gh "Create pull request"
-	  $ $FUNCNAME -t gh "List pull requests waiting for my review"
-	  $ $FUNCNAME -t gh "Summarize work I have done in issues and pull requests for promotion"
+unction set_aws_profile() {
+  # Select AWS PROFILE
+  local selected_profile=$(aws configure list-profiles |
+    grep -v "default" |
+    sort |
+    fzf --prompt "Select PROFILE. If press Ctrl-C, unset PROFILE. > " \
+        --height 50% --layout=reverse --border --preview-window 'right:50%' \
+        --preview "grep {} -A5 ~/.aws/config")
 
-	- General use cases
-	  $ $FUNCNAME "Kill processes holding onto deleted files"
-	  $ $FUNCNAME "Test whether there are SSL/TLS issues with github.com"
-	  $ $FUNCNAME "Convert SVG to PNG and resize"
-	  $ $FUNCNAME "Convert MOV to animated PNG"
-	EOF
+  # If the profile is not selected, unset the environment variable 'AWS_PROFILE', etc.
+  if [ -z "$selected_profile" ]; then
+    echo "Unset env 'AWS_PROFILE'!"
+    unset AWS_PROFILE
+    unset AWS_ACCESS_KEY_ID
+    unset AWS_SECRET_ACCESS_KEY
+    return
+  fi
 
-	local OPT OPTARG OPTIND
-	while getopts "dht:-:" OPT; do
-		if [ "$OPT" = "-" ]; then     # long option: reformulate OPT and OPTARG
-			OPT="${OPTARG%%=*}"       # extract long option name
-			OPTARG="${OPTARG#"$OPT"}" # extract long option argument (may be empty)
-			OPTARG="${OPTARG#=}"      # if long option argument, remove assigning `=`
-		fi
+  # If a profile is selected, set the environment variable 'AWS_PROFILE'.
+  echo "Set the environment variable 'AWS_PROFILE' to '${selected_profile}'!"
+  export AWS_PROFILE="$selected_profile"
+  unset AWS_ACCESS_KEY_ID
+  unset AWS_SECRET_ACCESS_KEY
 
-		case "$OPT" in
-			debug | d)
-				GH_DEBUG=api
-				;;
+  # Check sso-session
+  local AWS_SSO_SESSION_NAME="your 'sso-session' name"  # sso-sessionの名称に変更
 
-			help | h)
-				echo "$__USAGE"
-				return 0
-				;;
-
-			target | t)
-				TARGET="$OPTARG"
-				;;
-		esac
-	done
-
-	# shift so that $@, $1, etc. refer to the non-option arguments
-	shift "$((OPTIND-1))"
-
-	TMPFILE="$(mktemp -t gh-copilotXXX)"
-	trap 'rm -f "$TMPFILE"' EXIT
-	if GH_DEBUG="$GH_DEBUG" gh copilot suggest -t "$TARGET" "$@" --shell-out "$TMPFILE"; then
-		if [ -s "$TMPFILE" ]; then
-			FIXED_CMD="$(cat $TMPFILE)"
-			print -s "$FIXED_CMD"
-			echo
-			eval "$FIXED_CMD"
-		fi
-	else
-		return 1
-	fi
+  check_sso_session=$(aws sts get-caller-identity 2>&1)
+  if [[ "$check_sso_session" == *"Token has expired"* ]]; then
+    # If the session has expired, log in again.
+    echo -e "\n----------------------------\nYour Session has expired! Please login...\n----------------------------\n"
+    aws sso login --sso-session "${AWS_SSO_SESSION_NAME}"
+    aws sts get-caller-identity
+  else
+    # Display account information upon successful login, and show an error message upon login failure.
+    echo ${check_sso_session}
+  fi
 }
 
-ghce() {
-	FUNCNAME="$funcstack[1]"
-	local GH_DEBUG="$GH_DEBUG"
+function peco-src () {
+  local selected_dir=$(ghq list -p | peco --prompt="repositories >" --query "$LBUFFER")
+  if [ -n "$selected_dir" ]; then
+    BUFFER="cd ${selected_dir}"
+    zle accept-line
+  fi
+  zle clear-screen
+}
+zle -N peco-src
+bindkey '^]' peco-src
 
-	read -r -d '' __USAGE <<-EOF
-	Wrapper around \`gh copilot explain\` to explain a given input command in natural language.
-
-	USAGE
-	  $FUNCNAME [flags] <command>
-
-	FLAGS
-	  -d, --debug   Enable debugging
-	  -h, --help    Display help usage
-
-	EXAMPLES
-
-	# View disk usage, sorted by size
-	$ $FUNCNAME 'du -sh | sort -h'
-
-	# View git repository history as text graphical representation
-	$ $FUNCNAME 'git log --oneline --graph --decorate --all'
-
-	# Remove binary objects larger than 50 megabytes from git history
-	$ $FUNCNAME 'bfg --strip-blobs-bigger-than 50M'
-	EOF
-
-	local OPT OPTARG OPTIND
-	while getopts "dh-:" OPT; do
-		if [ "$OPT" = "-" ]; then     # long option: reformulate OPT and OPTARG
-			OPT="${OPTARG%%=*}"       # extract long option name
-			OPTARG="${OPTARG#"$OPT"}" # extract long option argument (may be empty)
-			OPTARG="${OPTARG#=}"      # if long option argument, remove assigning `=`
-		fi
-
-		case "$OPT" in
-			debug | d)
-				GH_DEBUG=api
-				;;
-
-			help | h)
-				echo "$__USAGE"
-				return 0
-				;;
-		esac
-	done
-
-	# shift so that $@, $1, etc. refer to the non-option arguments
-	shift "$((OPTIND-1))"
-
-	GH_DEBUG="$GH_DEBUG" gh copilot explain "$@"
+# pecoでいまopenされているprのブランチをチェックアウトする
+function peco-checkout-github-pr() {
+  local selected_buffer=$(hub pr list -s open -L 20 --format='%t :%H :%I%n' | peco --prompt 'pull requests>')
+  if [ -n "$selected_buffer" ]; then
+    local pr_no=$(echo $selected_buffer | awk -F":" '{print $NF}')
+    hub pr checkout $pr_no
+  fi
 }
 
-alias awsp=aws_profile_update
-
-function aws_profile_update() {
-
-   PROFILES=$(aws configure list-profiles)
-   PROFILES_ARRAY=($(echo $PROFILES))
-   SELECTED_PROFILE=$(echo $PROFILES | peco)
-
-   [[ -n ${PROFILES_ARRAY[(re)${SELECTED_PROFILE}]} ]] && export AWS_PROFILE=${SELECTED_PROFILE}; echo 'Updated profile' || echo ''
-
+function peco-git-branch() {
+  git branch -a --sort=-authordate |
+    grep -v -e '->' -e '*' |
+    perl -pe 's/^\h+//g' |
+    perl -pe 's#^remotes/origin/##' |
+    perl -nle 'print if !$c{$_}++' |
+    peco |
+    xargs git checkout
 }
+zle -N peco-git-branch
+bindkey '^[' peco-git-branch
+alias ghb="peco-git-branch"
+alias awsp=set_aws_profile
+alias ghr="peco-src"
+alias ghm='peco-checkout-github-pr'
 
-export STARSHIP_CONFIG=~/dotfiles/starship.toml
-eval "$(starship init zsh)"
-eval "$(mise activate zsh)"
+function gcloud-activate() {
+  name="$1"
+  project="$2"
+  echo "gcloud config configurations activate \"${name}\""
+  gcloud config configurations activate "${name}"
+}
+function gx-complete() {
+  _values $(gcloud config configurations list | awk '{print $1}')
+}
+function gx() {
+  name="$1"
+  if [ -z "$name" ]; then
+    line=$(gcloud config configurations list | peco)
+    name=$(echo "${line}" | awk '{print $1}')
+  else
+    line=$(gcloud config configurations list | grep "$name")
+  fi
+  project=$(echo "${line}" | awk '{print $4}')
+  gcloud-activate "${name}" "${project}"
+}
+compdef gx-complete gx
+alias gcpp="gx"

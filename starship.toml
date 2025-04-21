@@ -1,0 +1,19 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """$character"""
+
+right_format = """
+$gcloud
+"""
+
+[aws]
+format = 'on [$symbol($profile )(\($region\) )]($style)'
+style = 'bold blue'
+symbol = '�� '
+
+[gcloud]
+symbol = '️🇬️ '
+style  = 'fg:#F7F7F7 bg:#7E8EF1'
+format = '[](fg:#7E8EF1)[$symbol$project]($style)[▓▒](#7E8EF1)'
+detect_env_vars = ['STARSHIP_ENABLED_GCLOUD']
+
