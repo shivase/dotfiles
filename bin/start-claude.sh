@@ -448,7 +448,7 @@ start_individual_sessions() {
     echo "  Dev2:    tmux attach -t ${SESSION_NAME}-dev2"
     echo "  Dev3:    tmux attach -t ${SESSION_NAME}-dev3"
     echo ""
-    echo "💡 メッセージ送信: ./send-message.sh --session $SESSION_NAME [エージェント] [メッセージ]"
+    echo "💡 メッセージ送信: send-message.sh --session $SESSION_NAME [エージェント] [メッセージ]"
 }
 
 # 統合監視画面方式の関数
