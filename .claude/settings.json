@@ -6,6 +6,7 @@
   "skipInitialSetup": true,
   "permissions": {
     "allow": [
+      "Bash(rg:*)"
     ],
     "deny": [
       "Bash(sudo:*)",
@@ -33,4 +34,7 @@
       "mcp__supabase__execute_sql"
     ]
   },
+  "env": {
+    "USE_BUILTIN_RIPGREP": 1
+  }
 }
