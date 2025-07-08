@@ -121,6 +121,7 @@ path=(
   $HOME/.cabal/bin               # haskel package manager
   /opt/homebrew/bin(N-/)
   /opt/homebrew/sbin(N-/)
+  /opt/homebrew/share/google-cloud-sdk/path.zsh.inc
   /usr/local/heroku/bin(N-/)     # heroku toolbelt
   /usr/local/bin
   /usr/local/sbin
@@ -192,11 +193,7 @@ export LDFLAGS="-L/usr/local/opt/avr-gcc@7/lib"
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # Google Cloud SDK
-#
-#if [ -d /opt/homebrew/Caskroom/google-cloud-sdk ]; then
-#    source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
-#    source '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-#fi
+source  /opt/homebrew/share/google-cloud-sdk/completion.zsh.inc
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -230,9 +227,6 @@ if command -v starship &> /dev/null; then
   eval "$(starship completions zsh)"
   eval "$(starship init zsh)"
 fi
-
-# gcloud completion
-source /opt/homebrew/share/zsh/site-functions/_google-cloud-sdk
 
 # Added by Windsurf
 export PATH="/Users/shivase/.codeium/windsurf/bin:$PATH"
@@ -355,3 +349,10 @@ function gx() {
 }
 compdef gx-complete gx
 alias gcpp="gx"
+
+alias brew="arch -arm64 brew"
+
+eval "$(gh copilot alias -- zsh)"
+
+. "$HOME/.local/bin/env"
+
