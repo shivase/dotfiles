@@ -32,10 +32,12 @@ brew "php"
 brew "exa"
 brew "bat"
 brew "starship"
+brew "ripgrep"
 brew "mise"
 cask "dropbox"
 cask "kindle"
 cask "free-download-manager"
 cask "dash"
 cask "vlc"
+
 
