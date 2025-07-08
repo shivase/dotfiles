@@ -17,7 +17,8 @@
   editor = vim
   precomposeunicode = true
   excludesfile = ~/.gitignore
-	ignorecase = false
+  ignorecase = false
+  quotepath = false
 [push]
   default = current
 [branch]
@@ -75,12 +76,10 @@
   clean = git-media-clean %f
   smudge = git-media-smudge %f
 [filter "lfs"]
-  clean = git lfs clean %f
-  smudge = git lfs smudge %f
-  required = true
-  clean = git lfs clean %f
-  smudge = git lfs smudge %f
-  required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	required = true
+	process = git-lfs filter-process
 [homebrew]
   analyticsdisabled = true
 [mailmap]
@@ -107,3 +106,5 @@
 	enabled = true
 [fetch]
 	writeCommitGraph = true
+[http]
+	postbuffer = 4M
