@@ -152,6 +152,16 @@ delete_ai_session() {
     echo "🗑️ セッション削除: $target_session"
     local deleted_count=0
     
+    # Claude認証情報を保護するため、IDE連携のlockファイルをバックアップ
+    echo "🔒 Claude認証情報を保護中..."
+    local backup_dir="/tmp/claude_auth_backup_$(date +%s)"
+    mkdir -p "$backup_dir"
+    
+    if [ -d ~/.claude/ide ]; then
+        cp -r ~/.claude/ide "$backup_dir/" 2>/dev/null || true
+        echo "  ✅ IDE連携情報をバックアップしました"
+    fi
+    
     # 統合監視画面の場合
     if tmux has-session -t "$target_session" 2>/dev/null; then
         local pane_count=$(tmux list-panes -t "$target_session" 2>/dev/null | wc -l)
@@ -180,6 +190,15 @@ delete_ai_session() {
         fi
     done
     
+    # Claude認証情報を復元
+    if [ -d "$backup_dir/ide" ]; then
+        cp -r "$backup_dir/ide" ~/.claude/ 2>/dev/null || true
+        echo "  ✅ Claude認証情報を復元しました"
+    fi
+    
+    # バックアップディレクトリを削除
+    rm -rf "$backup_dir"
+    
     if [ $deleted_count -eq 0 ]; then
         echo "  ❌ セッション '$target_session' が見つかりませんでした"
         echo "  💡 セッション一覧を確認: $0 --list"
@@ -190,6 +209,7 @@ delete_ai_session() {
         
         echo "🧹 セッション削除完了確認中..."
         echo "  ✅ 確認完了"
+        echo "🔒 Claude認証情報は保護されています"
     fi
 }
 
@@ -209,11 +229,27 @@ delete_all_ai_sessions() {
     
     local deleted_count=0
     
+    # Claude認証情報を保護するため、IDE連携のlockファイルをバックアップ
+    echo "🔒 Claude認証情報を保護中..."
+    local backup_dir="/tmp/claude_auth_backup_$(date +%s)"
+    mkdir -p "$backup_dir"
+    
+    if [ -d ~/.claude/ide ]; then
+        cp -r ~/.claude/ide "$backup_dir/" 2>/dev/null || true
+        echo "  ✅ IDE連携情報をバックアップしました"
+    fi
+    
     # 全tmuxセッションを確認
     local all_sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null || echo "")
     
     if [ -z "$all_sessions" ]; then
         echo "ℹ️ 削除対象のセッションがありません"
+        # バックアップから復元
+        if [ -d "$backup_dir/ide" ]; then
+            cp -r "$backup_dir/ide" ~/.claude/ 2>/dev/null || true
+            echo "  ✅ Claude認証情報を復元しました"
+        fi
+        rm -rf "$backup_dir"
         return 0
     fi
     
@@ -229,6 +265,15 @@ delete_all_ai_sessions() {
         fi
     done <<< "$all_sessions"
     
+    # Claude認証情報を復元
+    if [ -d "$backup_dir/ide" ]; then
+        cp -r "$backup_dir/ide" ~/.claude/ 2>/dev/null || true
+        echo "  ✅ Claude認証情報を復元しました"
+    fi
+    
+    # バックアップディレクトリを削除
+    rm -rf "$backup_dir"
+    
     if [ $deleted_count -eq 0 ]; then
         echo "ℹ️ AIチーム関連のセッションが見つかりませんでした"
     else
@@ -237,6 +282,7 @@ delete_all_ai_sessions() {
         
         echo "🧹 セッション削除確認中..."
         echo "  ✅ 確認完了"
+        echo "🔒 Claude認証情報は保護されています"
     fi
 }
 
@@ -342,14 +388,22 @@ if check_claude_auth; then
     AUTH_OK=true
 fi
 
-# Claude CLIの初期設定を完全に事前実行
+# Claude CLIの初期設定を完全に事前実行（既存設定を保護）
 setup_claude_config() {
     echo "🎨 Claude CLI初期設定中..."
     
     sleep 1
     
-    # 設定ファイルを作成
+    # 設定ディレクトリを作成
     mkdir -p ~/.claude
+    
+    # 既存の設定ファイルがある場合は保護
+    if [ -f ~/.claude/settings.json ] && [ -s ~/.claude/settings.json ]; then
+        echo "  ℹ️ 既存のClaude設定を保護（上書きしません）"
+        return 0
+    fi
+    
+    # 設定ファイルを作成（新規の場合のみ）
     cat > ~/.claude/settings.json << 'EOF'
 {
   "model": "sonnet", 
