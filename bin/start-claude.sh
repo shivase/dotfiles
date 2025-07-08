@@ -20,18 +20,18 @@ show_usage() {
   --help           このヘルプを表示
 
 管理コマンド:
-  list             起動中のAIチームセッション一覧を表示
-  delete [名前]    指定したセッションを削除
-  delete-all       全てのAIチームセッションを削除
+  --list             起動中のAIチームセッション一覧を表示
+  --delete [名前]    指定したセッションを削除
+  --delete-all       全てのAIチームセッションを削除
 
 例:
   $0 myproject               # myprojectセッションで統合監視画面起動
   $0 ai-team                 # ai-teamセッションで統合監視画面起動
   $0 myproject --reset       # myprojectセッションを再作成
   $0 myproject --individual  # myprojectで個別セッション方式起動
-  $0 list                    # セッション一覧表示
-  $0 delete myproject        # myprojectセッションを削除
-  $0 delete-all              # 全セッション削除
+  $0 --list                    # セッション一覧表示
+  $0 --delete myproject        # myprojectセッションを削除
+  $0 --delete-all              # 全セッション削除
 
 EOF
 }
@@ -76,12 +76,12 @@ list_ai_sessions() {
     
     while read -r session; do
         if [[ -n "$session" ]]; then
-            # 統合監視画面の判定（5ペイン構成）
+            # 統合監視画面の判定（6ペイン構成）
             local pane_count=$(tmux list-panes -t "$session" 2>/dev/null | wc -l)
-            if [ "$pane_count" -eq 5 ]; then
+            if [ "$pane_count" -eq 6 ]; then
                 integrated_sessions+=("$session")
-            # 個別セッション方式の判定（-ceo, -manager, -dev1-3 で終わる）
-            elif [[ "$session" =~ -(ceo|manager|dev[1-3])$ ]]; then
+            # 個別セッション方式の判定（-ceo, -manager, -dev1-4 で終わる）
+            elif [[ "$session" =~ -(ceo|manager|dev[1-4])$ ]]; then
                 local base_name="${session%-*}"
                 if [[ ! " ${individual_sessions[@]} " =~ " ${base_name} " ]]; then
                     individual_sessions+=("$base_name")
@@ -98,9 +98,9 @@ list_ai_sessions() {
         echo "📺 統合監視画面セッション:"
         for session in "${integrated_sessions[@]}"; do
             local panes_info=$(tmux list-panes -t "$session" -F "#{pane_title}" 2>/dev/null | tr '\n' ',' | sed 's/,$//')
-            echo "  🎯 $session (5ペイン: $panes_info)"
+            echo "  🎯 $session (6ペイン: $panes_info)"
             echo "    接続: tmux attach -t $session"
-            echo "    削除: $0 delete $session"
+            echo "    削除: $0 --delete $session"
         done
     fi
     
@@ -110,7 +110,7 @@ list_ai_sessions() {
         echo "🔄 個別セッション方式:"
         for base_name in "${individual_sessions[@]}"; do
             echo "  📋 $base_name グループ:"
-            local agents=("ceo" "manager" "dev1" "dev2" "dev3")
+            local agents=("ceo" "manager" "dev1" "dev2" "dev3" "dev4")
             for agent in "${agents[@]}"; do
                 local full_session="${base_name}-${agent}"
                 if tmux has-session -t "$full_session" 2>/dev/null; then
@@ -119,7 +119,7 @@ list_ai_sessions() {
                     echo "    ❌ $full_session (未起動)"
                 fi
             done
-            echo "    削除: $0 delete $base_name"
+            echo "    削除: $0 --delete $base_name"
         done
     fi
     
@@ -144,8 +144,8 @@ delete_ai_session() {
     
     if [ -z "$target_session" ]; then
         echo "❌ エラー: 削除するセッション名を指定してください"
-        echo "使用方法: $0 delete [セッション名]"
-        echo "セッション一覧: $0 list"
+        echo "使用方法: $0 --delete [セッション名]"
+        echo "セッション一覧: $0 --list"
         return 1
     fi
     
@@ -155,7 +155,7 @@ delete_ai_session() {
     # 統合監視画面の場合
     if tmux has-session -t "$target_session" 2>/dev/null; then
         local pane_count=$(tmux list-panes -t "$target_session" 2>/dev/null | wc -l)
-        if [ "$pane_count" -eq 5 ]; then
+        if [ "$pane_count" -eq 6 ]; then
             echo "  📺 統合監視画面セッション '$target_session' を削除中..."
             tmux kill-session -t "$target_session"
             echo "  ✅ 削除完了"
@@ -169,7 +169,7 @@ delete_ai_session() {
     fi
     
     # 個別セッション方式の場合
-    local agents=("ceo" "manager" "dev1" "dev2" "dev3")
+    local agents=("ceo" "manager" "dev1" "dev2" "dev3" "dev4")
     for agent in "${agents[@]}"; do
         local full_session="${target_session}-${agent}"
         if tmux has-session -t "$full_session" 2>/dev/null; then
@@ -182,7 +182,7 @@ delete_ai_session() {
     
     if [ $deleted_count -eq 0 ]; then
         echo "  ❌ セッション '$target_session' が見つかりませんでした"
-        echo "  💡 セッション一覧を確認: $0 list"
+        echo "  💡 セッション一覧を確認: $0 --list"
         return 1
     else
         echo ""
@@ -219,9 +219,9 @@ delete_all_ai_sessions() {
     
     while read -r session; do
         if [[ -n "$session" ]]; then
-            # 統合監視画面（5ペイン）またはAIチーム個別セッション
+            # 統合監視画面（6ペイン）またはAIチーム個別セッション
             local pane_count=$(tmux list-panes -t "$session" 2>/dev/null | wc -l)
-            if [ "$pane_count" -eq 5 ] || [[ "$session" =~ -(ceo|manager|dev[1-3])$ ]]; then
+            if [ "$pane_count" -eq 6 ] || [[ "$session" =~ -(ceo|manager|dev[1-4])$ ]]; then
                 echo "  🗑️ セッション '$session' を削除中..."
                 tmux kill-session -t "$session"
                 deleted_count=$((deleted_count + 1))
@@ -247,22 +247,22 @@ while [[ $# -gt 0 ]]; do
             show_usage
             exit 0
             ;;
-        list)
+        --list)
             list_ai_sessions
             exit 0
             ;;
-        delete)
+        --delete)
             if [[ -n "$2" && ! "$2" =~ ^-- ]]; then
                 delete_ai_session "$2"
                 exit 0
             else
-                echo "❌ エラー: delete には削除するセッション名が必要です"
-                echo "使用方法: $0 delete [セッション名]"
-                echo "セッション一覧: $0 list"
+                echo "❌ エラー: --delete には削除するセッション名が必要です"
+                echo "使用方法: $0 --delete [セッション名]"
+                echo "セッション一覧: $0 --list"
                 exit 1
             fi
             ;;
-        delete-all)
+        --delete-all)
             delete_all_ai_sessions
             exit 0
             ;;
@@ -409,10 +409,11 @@ start_individual_sessions() {
         tmux kill-session -t "${SESSION_NAME}-dev1" 2>/dev/null || true
         tmux kill-session -t "${SESSION_NAME}-dev2" 2>/dev/null || true
         tmux kill-session -t "${SESSION_NAME}-dev3" 2>/dev/null || true
+        tmux kill-session -t "${SESSION_NAME}-dev4" 2>/dev/null || true
     fi
     
     # 各セッションを作成
-    agents=("ceo" "manager" "dev1" "dev2" "dev3")
+    agents=("ceo" "manager" "dev1" "dev2" "dev3" "dev4")
     for agent in "${agents[@]}"; do
         local session="${SESSION_NAME}-${agent}"
         
@@ -421,6 +422,10 @@ start_individual_sessions() {
         else
             echo "  🚀 セッション $session を作成中..."
             tmux new-session -d -s "$session"
+            
+            # セッション名をウィンドウ名に設定
+            tmux rename-window -t "$session" "$session"
+            
             tmux send-keys -t "$session" "cd '$WORKING_DIR'" C-m
             
             # インストラクションファイルの選択
@@ -447,6 +452,7 @@ start_individual_sessions() {
     echo "  Dev1:    tmux attach -t ${SESSION_NAME}-dev1"
     echo "  Dev2:    tmux attach -t ${SESSION_NAME}-dev2"
     echo "  Dev3:    tmux attach -t ${SESSION_NAME}-dev3"
+    echo "  Dev4:    tmux attach -t ${SESSION_NAME}-dev4"
     echo ""
     echo "💡 メッセージ送信: send-message.sh --session $SESSION_NAME [エージェント] [メッセージ]"
 }
@@ -486,6 +492,9 @@ start_integrated_monitor() {
     # 監視用セッションを作成
     tmux new-session -d -s "$SESSION_NAME"
     
+    # セッション名をウィンドウ名に設定
+    tmux rename-window -t "$SESSION_NAME" "$SESSION_NAME"
+    
     # 正しいレイアウトを構築
     echo "🔧 統合監視画面レイアウト構築中..."
     echo "  目標: 上部左=CEO、下部左=Manager、下部右=Dev1/Dev2/Dev3"
@@ -510,7 +519,11 @@ start_integrated_monitor() {
     tmux split-window -v -t "$SESSION_NAME.4"
     echo "  ✓ 最後のペインを分割完了（Dev3用）"
     
-    # 6. レイアウト最適化とペインタイトル表示設定
+    # 6. さらにDev4用のペインを分割
+    tmux split-window -v -t "$SESSION_NAME.5"
+    echo "  ✓ Dev4用のペインを分割完了"
+    
+    # 7. レイアウト最適化とペインタイトル表示設定
     echo "  🔧 レイアウト最適化中..."
     
     # ペインタイトルを表示するように設定
@@ -535,16 +548,17 @@ start_integrated_monitor() {
     PANES=($(tmux list-panes -t "$SESSION_NAME" -F "#{pane_id}" | sed 's/%//g'))
     
     # 配列の長さをチェック
-    if [ ${#PANES[@]} -eq 5 ]; then
+    if [ ${#PANES[@]} -eq 6 ]; then
         echo "ペイン構成: ${PANES[@]}"
         
-        # 正しいレイアウトでの統合Claude起動（5ペイン構成）
+        # 正しいレイアウトでの統合Claude起動（6ペイン構成）
         echo "  🎯 各ペインでの直接Claude起動とタイトル設定:"
         echo "    ペイン 0 (上部左): CEO"
         echo "    ペイン 1 (下部左): Manager" 
         echo "    ペイン 2 (右上): Dev1"
         echo "    ペイン 3 (右中): Dev2"
         echo "    ペイン 4 (右下): Dev3"
+        echo "    ペイン 5 (右最下): Dev4"
         
         # 各ペインにタイトルを設定し、直接Claudeを起動
         for i in "${!PANES[@]}"; do
@@ -572,6 +586,11 @@ start_integrated_monitor() {
                 4) 
                     role="Dev3"
                     pane_title="Dev3"
+                    instruction_file="$INSTRUCTIONS_DIR/developer.md"
+                    ;;
+                5) 
+                    role="Dev4"
+                    pane_title="Dev4"
                     instruction_file="$INSTRUCTIONS_DIR/developer.md"
                     ;;
             esac
@@ -618,6 +637,7 @@ start_integrated_monitor() {
                 2) pane_title="Dev1" ;;
                 3) pane_title="Dev2" ;;
                 4) pane_title="Dev3" ;;
+                5) pane_title="Dev4" ;;
             esac
             if tmux list-panes -t "$SESSION_NAME" | grep -q "%${PANES[$i]}"; then
                 tmux select-pane -t "$SESSION_NAME.%${PANES[$i]}" -T "$pane_title"
@@ -628,7 +648,7 @@ start_integrated_monitor() {
         echo "💡 各エージェントはClaude起動完了後、上位からの指示を待機しています"
         echo "🎯 CEOはユーザーからの依頼を、Managerはceoからの指示を、Developerはmanagerからの指示を待機中"
     else
-        echo "⚠️ 警告: 期待するペイン数(5)と異なります (実際: ${#PANES[@]})"
+        echo "⚠️ 警告: 期待するペイン数(6)と異なります (実際: ${#PANES[@]})"
         echo "ペイン一覧: ${PANES[@]}"
     fi
 
