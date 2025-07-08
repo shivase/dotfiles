@@ -24,6 +24,7 @@ show_usage() {
   dev1    - 実行エージェント1（柔軟な役割対応）
   dev2    - 実行エージェント2（柔軟な役割対応）
   dev3    - 実行エージェント3（柔軟な役割対応）
+  dev4    - 実行エージェント4（柔軟な役割対応）
 
 使用例:
   $0 --session myproject manager "新しいプロジェクトを開始してください"
@@ -53,12 +54,12 @@ list_all_sessions() {
     
     while read -r session; do
         if [[ -n "$session" ]]; then
-            # 統合監視画面の判定（5ペイン構成）
+            # 統合監視画面の判定（6ペイン構成）
             local pane_count=$(tmux list-panes -t "$session" 2>/dev/null | wc -l)
-            if [ "$pane_count" -eq 5 ]; then
+            if [ "$pane_count" -eq 6 ]; then
                 integrated_sessions+=("$session")
-            # 個別セッション方式の判定（-ceo, -manager, -dev1-3 で終わる）
-            elif [[ "$session" =~ -(ceo|manager|dev[1-3])$ ]]; then
+            # 個別セッション方式の判定（-ceo, -manager, -dev1-4 で終わる）
+            elif [[ "$session" =~ -(ceo|manager|dev[1-4])$ ]]; then
                 local base_name="${session%-*}"
                 if [[ ! " ${individual_sessions[@]} " =~ " ${base_name} " ]]; then
                     individual_sessions+=("$base_name")
@@ -72,7 +73,7 @@ list_all_sessions() {
         echo ""
         echo "📺 統合監視画面セッション:"
         for session in "${integrated_sessions[@]}"; do
-            echo "  🎯 $session (5ペイン統合画面)"
+            echo "  🎯 $session (6ペイン統合画面)"
             echo "    使用例: $0 --session $session ceo \"メッセージ\""
         done
     fi
@@ -111,13 +112,14 @@ show_agents() {
     # 統合監視画面の状態を確認
     if tmux has-session -t "$session_name" 2>/dev/null; then
         local pane_count=$(tmux list-panes -t "$session_name" 2>/dev/null | wc -l)
-        if [ "$pane_count" -eq 5 ]; then
+        if [ "$pane_count" -eq 6 ]; then
             echo "🎯 統合監視画面（$session_name）使用中:"
-            echo "  ceo     → ペイン1    (最高経営責任者)"
-            echo "  manager → ペイン2    (プロジェクトマネージャー)"
-            echo "  dev1    → ペイン3    (実行エージェント1)"
-            echo "  dev2    → ペイン4    (実行エージェント2)"
-            echo "  dev3    → ペイン5    (実行エージェント3)"
+            echo "  ceo     → ペイン0    (最高経営責任者)"
+            echo "  manager → ペイン1    (プロジェクトマネージャー)"
+            echo "  dev1    → ペイン2    (実行エージェント1)"
+            echo "  dev2    → ペイン3    (実行エージェント2)"
+            echo "  dev3    → ペイン4    (実行エージェント3)"
+            echo "  dev4    → ペイン5    (実行エージェント4)"
             echo ""
             echo "現在のペイン状態:"
             tmux list-panes -t "$session_name" -F "  ペイン#{pane_index}: #{pane_title}" 2>/dev/null
@@ -127,7 +129,7 @@ show_agents() {
         fi
     else
         # 個別セッション方式の確認
-        local agents=("ceo" "manager" "dev1" "dev2" "dev3")
+        local agents=("ceo" "manager" "dev1" "dev2" "dev3" "dev4")
         local found_sessions=()
         
         for agent in "${agents[@]}"; do
@@ -146,6 +148,7 @@ show_agents() {
                     "dev1") echo "  dev1    → ${session_name}-dev1       (実行エージェント1)" ;;
                     "dev2") echo "  dev2    → ${session_name}-dev2       (実行エージェント2)" ;;
                     "dev3") echo "  dev3    → ${session_name}-dev3       (実行エージェント3)" ;;
+                    "dev4") echo "  dev4    → ${session_name}-dev4       (実行エージェント4)" ;;
                 esac
             done
         else
@@ -213,11 +216,11 @@ detect_default_session() {
         return 1
     fi
     
-    # 統合監視画面セッション（5ペイン）を優先
+    # 統合監視画面セッション（6ペイン）を優先
     while read -r session; do
         if [[ -n "$session" ]]; then
             local pane_count=$(tmux list-panes -t "$session" 2>/dev/null | wc -l)
-            if [ "$pane_count" -eq 5 ]; then
+            if [ "$pane_count" -eq 6 ]; then
                 echo "$session"
                 return 0
             fi
@@ -227,7 +230,7 @@ detect_default_session() {
     # 個別セッション方式のベース名を探す
     local individual_sessions=()
     while read -r session; do
-        if [[ -n "$session" && "$session" =~ -(ceo|manager|dev[1-3])$ ]]; then
+        if [[ -n "$session" && "$session" =~ -(ceo|manager|dev[1-4])$ ]]; then
             local base_name="${session%-*}"
             if [[ ! " ${individual_sessions[@]} " =~ " ${base_name} " ]]; then
                 individual_sessions+=("$base_name")
@@ -331,7 +334,7 @@ main() {
     # 統合監視画面の場合
     if tmux has-session -t "$session_name" 2>/dev/null; then
         local pane_count=$(tmux list-panes -t "$session_name" 2>/dev/null | wc -l)
-        if [ "$pane_count" -eq 5 ]; then
+        if [ "$pane_count" -eq 6 ]; then
             echo "🎯 統合監視画面（$session_name）を使用してメッセージを送信します"
             
             # 固定ペインタイトルを使用したルーティング
@@ -344,8 +347,8 @@ main() {
                         target="$session_name.$ceo_pane"
                         echo "📍 CEOペイン（タイトル: CEO）にメッセージを送信"
                     else
-                        target="$session_name.1"
-                        echo "📍 CEOペイン（ペイン1 - フォールバック）にメッセージを送信"
+                        target="$session_name.0"
+                        echo "📍 CEOペイン（ペイン0 - フォールバック）にメッセージを送信"
                     fi
                     ;;
                 "manager")
@@ -354,8 +357,8 @@ main() {
                         target="$session_name.$manager_pane"
                         echo "📍 Managerペイン（タイトル: Manager）にメッセージを送信"
                     else
-                        target="$session_name.2"
-                        echo "📍 Managerペイン（ペイン2 - フォールバック）にメッセージを送信"
+                        target="$session_name.1"
+                        echo "📍 Managerペイン（ペイン1 - フォールバック）にメッセージを送信"
                     fi
                     ;;
                 "dev1")
@@ -364,8 +367,8 @@ main() {
                         target="$session_name.$dev1_pane"
                         echo "📍 Dev1ペイン（タイトル: Dev1）にメッセージを送信"
                     else
-                        target="$session_name.3"
-                        echo "📍 Dev1ペイン（ペイン3 - フォールバック）にメッセージを送信"
+                        target="$session_name.2"
+                        echo "📍 Dev1ペイン（ペイン2 - フォールバック）にメッセージを送信"
                     fi
                     ;;
                 "dev2")
@@ -374,8 +377,8 @@ main() {
                         target="$session_name.$dev2_pane"
                         echo "📍 Dev2ペイン（タイトル: Dev2）にメッセージを送信"
                     else
-                        target="$session_name.4"
-                        echo "📍 Dev2ペイン（ペイン4 - フォールバック）にメッセージを送信"
+                        target="$session_name.3"
+                        echo "📍 Dev2ペイン（ペイン3 - フォールバック）にメッセージを送信"
                     fi
                     ;;
                 "dev3")
@@ -384,8 +387,18 @@ main() {
                         target="$session_name.$dev3_pane"
                         echo "📍 Dev3ペイン（タイトル: Dev3）にメッセージを送信"
                     else
+                        target="$session_name.4"
+                        echo "📍 Dev3ペイン（ペイン4 - フォールバック）にメッセージを送信"
+                    fi
+                    ;;
+                "dev4")
+                    local dev4_pane=$(echo "$pane_list" | grep ":Dev4$" | cut -d: -f1 | head -1)
+                    if [[ -n "$dev4_pane" ]]; then
+                        target="$session_name.$dev4_pane"
+                        echo "📍 Dev4ペイン（タイトル: Dev4）にメッセージを送信"
+                    else
                         target="$session_name.5"
-                        echo "📍 Dev3ペイン（ペイン5 - フォールバック）にメッセージを送信"
+                        echo "📍 Dev4ペイン（ペイン5 - フォールバック）にメッセージを送信"
                     fi
                     ;;
                 *)
@@ -403,7 +416,7 @@ main() {
         echo "🔄 個別セッション方式（$session_name）を使用してメッセージを送信します"
         
         case $agent in
-            "ceo"|"manager"|"dev1"|"dev2"|"dev3")
+            "ceo"|"manager"|"dev1"|"dev2"|"dev3"|"dev4")
                 local full_session="${session_name}-${agent}"
                 if ! check_session "$full_session"; then
                     exit 1

@@ -491,9 +491,14 @@ start_individual_sessions() {
                 inst_file="$INSTRUCTIONS_DIR/developer.md"
             fi
             
-            # Claude CLIを起動（事前設定済み）
-            local claude_cmd="\"$CLAUDE_CLI_PATH\" --dangerously-skip-permissions \"$inst_file\""
+            # tmux環境でのraw mode問題を回避するため、ptyで起動
+            local claude_cmd="script -q /dev/null \"$CLAUDE_CLI_PATH\" --dangerously-skip-permissions"
             tmux send-keys -t "$session" "$claude_cmd" C-m
+            
+            # Claude起動を少し待ってからinstructionファイルの内容を送信
+            sleep 2
+            echo "  📋 instructionファイルの内容を送信中..."
+            tmux send-keys -t "$session" "cat \"$inst_file\"" C-m
         fi
     done
     
@@ -580,6 +585,17 @@ start_integrated_monitor() {
     # 7. レイアウト最適化とペインタイトル表示設定
     echo "  🔧 レイアウト最適化中..."
     
+    # 右側のDev1-Dev4のペインを等間隔にサイズ調整
+    echo "  📏 右側ペインのサイズを等間隔に調整中..."
+    # ペイン2(Dev1)を25%に設定
+    tmux resize-pane -t "$SESSION_NAME.2" -p 25
+    # ペイン3(Dev2)を25%に設定  
+    tmux resize-pane -t "$SESSION_NAME.3" -p 25
+    # ペイン4(Dev3)を25%に設定
+    tmux resize-pane -t "$SESSION_NAME.4" -p 25
+    # ペイン5(Dev4)は残りの25%になる
+    echo "  ✓ 右側ペインのサイズ調整完了"
+    
     # ペインタイトルを表示するように設定
     tmux set-option -t "$SESSION_NAME" pane-border-status top
     tmux set-option -t "$SESSION_NAME" pane-border-format "#T"
@@ -664,12 +680,19 @@ start_integrated_monitor() {
                 # Claude CLIを起動（事前設定済みのため、プロンプトなし）
                 printf "  📝 コマンド送信中...\n"
                 
-                # 設定済みClaude CLIを起動
-                local claude_cmd="\"$CLAUDE_CLI_PATH\" --dangerously-skip-permissions \"$instruction_file\""
+                # tmux環境でのraw mode問題を回避するため、ptyで起動
+                local claude_cmd="script -q /dev/null \"$CLAUDE_CLI_PATH\" --dangerously-skip-permissions"
                 printf "  🔧 実行コマンド: %s\n" "$claude_cmd"
                 
                 # コマンドを送信（直接send-keysで送信し、改行の問題を回避）
                 tmux send-keys -t "$SESSION_NAME.%${PANES[$i]}" "$claude_cmd" C-m
+                
+                # Claude起動を少し待ってからinstructionファイルの内容を送信
+                sleep 2
+                printf "  📋 instructionファイルの内容を送信中...\n"
+                
+                # instructionファイルの内容をClaudeに送信
+                tmux send-keys -t "$SESSION_NAME.%${PANES[$i]}" "cat \"$instruction_file\"" C-m
                 
                 printf "  ✓ ペイン %%${PANES[$i]} で ${role} を起動コマンド送信完了（タイトル: ${pane_title}）\n"
             else
@@ -679,8 +702,8 @@ start_integrated_monitor() {
         
         # Claude起動を待つ
         echo ""
-        echo "⏳ Claude起動を待機中（3秒）..."
-        sleep 3
+        echo "⏳ Claude起動を待機中（5秒）..."
+        sleep 5
         
         # ペインタイトルを強制的に固定（Claude起動後に再設定）
         echo "🔒 ペインタイトルを固定設定中..."
