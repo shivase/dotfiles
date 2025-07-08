@@ -337,65 +337,67 @@ main() {
         if [ "$pane_count" -eq 6 ]; then
             echo "🎯 統合監視画面（$session_name）を使用してメッセージを送信します"
             
-            # 固定ペインタイトルを使用したルーティング
-            local pane_list=$(tmux list-panes -t "$session_name" -F "#{pane_id}:#{pane_title}" 2>/dev/null)
+            # 動的ペイン検出と固定マッピング
+            local pane_list=$(tmux list-panes -t "$session_name" -F "#{pane_index}:#{pane_title}" 2>/dev/null)
+            echo "🔍 ペイン構成: $pane_list"
             
             case $agent in
                 "ceo")
-                    local ceo_pane=$(echo "$pane_list" | grep ":CEO$" | cut -d: -f1 | head -1)
-                    if [[ -n "$ceo_pane" ]]; then
-                        target="$session_name.$ceo_pane"
-                        echo "📍 CEOペイン（タイトル: CEO）にメッセージを送信"
-                    else
-                        target="$session_name.0"
-                        echo "📍 CEOペイン（ペイン0 - フォールバック）にメッセージを送信"
-                    fi
+                    # CEOは最初のペインを使用（通常ペイン0だが、実際の最小番号を使用）
+                    local first_pane=$(echo "$pane_list" | head -1 | cut -d: -f1)
+                    target="$session_name.$first_pane"
+                    echo "📍 CEOペイン（ペイン$first_pane）にメッセージを送信"
                     ;;
                 "manager")
-                    local manager_pane=$(echo "$pane_list" | grep ":Manager$" | cut -d: -f1 | head -1)
-                    if [[ -n "$manager_pane" ]]; then
-                        target="$session_name.$manager_pane"
-                        echo "📍 Managerペイン（タイトル: Manager）にメッセージを送信"
+                    # Managerは2番目のペインを使用
+                    local second_pane=$(echo "$pane_list" | sed -n '2p' | cut -d: -f1)
+                    if [[ -n "$second_pane" ]]; then
+                        target="$session_name.$second_pane"
+                        echo "📍 Managerペイン（ペイン$second_pane）にメッセージを送信"
                     else
                         target="$session_name.1"
                         echo "📍 Managerペイン（ペイン1 - フォールバック）にメッセージを送信"
                     fi
                     ;;
                 "dev1")
-                    local dev1_pane=$(echo "$pane_list" | grep ":Dev1$" | cut -d: -f1 | head -1)
-                    if [[ -n "$dev1_pane" ]]; then
-                        target="$session_name.$dev1_pane"
-                        echo "📍 Dev1ペイン（タイトル: Dev1）にメッセージを送信"
+                    # Dev1は3番目のペインを使用
+                    local third_pane=$(echo "$pane_list" | sed -n '3p' | cut -d: -f1)
+                    if [[ -n "$third_pane" ]]; then
+                        target="$session_name.$third_pane"
+                        echo "📍 Dev1ペイン（ペイン$third_pane）にメッセージを送信"
                     else
                         target="$session_name.2"
                         echo "📍 Dev1ペイン（ペイン2 - フォールバック）にメッセージを送信"
                     fi
                     ;;
                 "dev2")
-                    local dev2_pane=$(echo "$pane_list" | grep ":Dev2$" | cut -d: -f1 | head -1)
-                    if [[ -n "$dev2_pane" ]]; then
-                        target="$session_name.$dev2_pane"
-                        echo "📍 Dev2ペイン（タイトル: Dev2）にメッセージを送信"
+                    # Dev2は4番目のペインを使用
+                    local fourth_pane=$(echo "$pane_list" | sed -n '4p' | cut -d: -f1)
+                    if [[ -n "$fourth_pane" ]]; then
+                        target="$session_name.$fourth_pane"
+                        echo "📍 Dev2ペイン（ペイン$fourth_pane）にメッセージを送信"
                     else
                         target="$session_name.3"
                         echo "📍 Dev2ペイン（ペイン3 - フォールバック）にメッセージを送信"
                     fi
                     ;;
                 "dev3")
-                    local dev3_pane=$(echo "$pane_list" | grep ":Dev3$" | cut -d: -f1 | head -1)
-                    if [[ -n "$dev3_pane" ]]; then
-                        target="$session_name.$dev3_pane"
-                        echo "📍 Dev3ペイン（タイトル: Dev3）にメッセージを送信"
+                    # Dev3は5番目のペインを使用
+                    local fifth_pane=$(echo "$pane_list" | sed -n '5p' | cut -d: -f1)
+                    if [[ -n "$fifth_pane" ]]; then
+                        target="$session_name.$fifth_pane"
+                        echo "📍 Dev3ペイン（ペイン$fifth_pane）にメッセージを送信"
                     else
                         target="$session_name.4"
                         echo "📍 Dev3ペイン（ペイン4 - フォールバック）にメッセージを送信"
                     fi
                     ;;
                 "dev4")
-                    local dev4_pane=$(echo "$pane_list" | grep ":Dev4$" | cut -d: -f1 | head -1)
-                    if [[ -n "$dev4_pane" ]]; then
-                        target="$session_name.$dev4_pane"
-                        echo "📍 Dev4ペイン（タイトル: Dev4）にメッセージを送信"
+                    # Dev4は6番目のペインを使用
+                    local sixth_pane=$(echo "$pane_list" | sed -n '6p' | cut -d: -f1)
+                    if [[ -n "$sixth_pane" ]]; then
+                        target="$session_name.$sixth_pane"
+                        echo "📍 Dev4ペイン（ペイン$sixth_pane）にメッセージを送信"
                     else
                         target="$session_name.5"
                         echo "📍 Dev4ペイン（ペイン5 - フォールバック）にメッセージを送信"
