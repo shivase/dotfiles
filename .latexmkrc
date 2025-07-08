@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+# !/usr/bin/env perl
 
 # LaTeX
 $latex = 'platex -synctex=1 -halt-on-error -file-line-error %O %S';
