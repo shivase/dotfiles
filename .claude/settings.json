@@ -6,7 +6,15 @@
   "skipInitialSetup": true,
   "permissions": {
     "allow": [
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Bash(tmux list-sessions:*)",
+      "Bash(tmux show-options:*)",
+      "Bash(tmux set-window-option:*)",
+      "Bash(tmux list-panes:*)",
+      "Bash(tmux show-window-options:*)",
+      "Bash(tmux bind-key:*)",
+      "Bash(tmux list-windows:*)",
+      "Bash(tmux rename-window:*)"
     ],
     "deny": [
       "Bash(sudo:*)",
