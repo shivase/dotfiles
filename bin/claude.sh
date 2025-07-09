@@ -425,7 +425,7 @@ echo "📂 インストラクションファイルをチェック中..."
 missing_count=0
 
 # 正しいinstructionsパスを設定
-INSTRUCTIONS_DIR="/Users/sumik/dotfiles/bin/instructions"
+INSTRUCTIONS_DIR="/Users/sumik/dotfiles/claude/instructions"
 
 # ceo.md のチェック
 if [ ! -f "$INSTRUCTIONS_DIR/ceo.md" ]; then
@@ -499,6 +499,9 @@ start_individual_sessions() {
             sleep 2
             echo "  📋 instructionファイルの内容を送信中..."
             tmux send-keys -t "$session" "cat \"$inst_file\"" C-m
+            sleep 1
+            # Claude CLIがプロンプト状態に戻るようにEnterを送信
+            tmux send-keys -t "$session" "" C-m
         fi
     done
     
@@ -693,6 +696,9 @@ start_integrated_monitor() {
                 
                 # instructionファイルの内容をClaudeに送信
                 tmux send-keys -t "$SESSION_NAME.%${PANES[$i]}" "cat \"$instruction_file\"" C-m
+                sleep 1
+                # Claude CLIがプロンプト状態に戻るようにEnterを送信
+                tmux send-keys -t "$SESSION_NAME.%${PANES[$i]}" "" C-m
                 
                 printf "  ✓ ペイン %%${PANES[$i]} で ${role} を起動コマンド送信完了（タイトル: ${pane_title}）\n"
             else
