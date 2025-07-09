@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./build/send-claude:*)",
+      "Bash(./build/send-ai-team:*)",
+      "Bash(tmux kill-server:*)"
+    ],
+    "deny": []
+  }
+}
