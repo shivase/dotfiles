@@ -127,6 +127,7 @@ path=(
   /usr/local/sbin
   /usr/local/share/zsh/site-functions(N-/)
   /usr/local/opt/avr-gcc@7/bin(N-/)
+  /opt/homebrew/opt/coreutils/libexec/gnubin(N-/)
   /opt/homebrew/opt/llvm/bin(N-/)
   /Library/TeX/texbin(N-/)
   $path
@@ -144,7 +145,6 @@ zplug "b4b4r07/emoji-cli"
 zplug "sorin-ionescu/prezto"
 zplug "b4b4r07/enhancd", use:enhancd.sh
 zplug "rupa/z", use:"*.sh"
-zplug "wbingli/zsh-wakatime"
 zplug "plugins/git", from:oh-my-zsh
 zplug "woefe/git-prompt.zsh"
 zplug "mafredri/zsh-async", from:github
@@ -152,6 +152,7 @@ zplug "mafredri/zsh-async", from:github
 zplug "modules/osx", from:prezto, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "spaceship-prompt/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
+zplug 'sobolevn/wakatime-zsh-plugin'
 
 if ! zplug check; then
   zplug install
@@ -208,20 +209,6 @@ fpath+=~/.zfunc
 
 complete -o nospace -C /opt/homebrew/Cellar/tfenv/3.0.0/versions/1.3.7/terraform terraform
 
-#source ~/.config/op/plugins.sh
-
-#alias awsp=aws_profile_update
-
-#function aws_profile_update() {
-#
-#   PROFILES=$(aws configure list-profiles)
-#   PROFILES_ARRAY=($(echo $PROFILES))
-#   SELECTED_PROFILE=$(echo $PROFILES | peco)
-#
-#   [[ -n ${PROFILES_ARRAY[(re)${SELECTED_PROFILE}]} ]] && export AWS_PROFILE=${SELECTED_PROFILE}; echo 'Updated profile' || echo ''
-#
-#}
-
 eval "$(mise activate zsh --shims)"
 if command -v starship &> /dev/null; then
   eval "$(starship completions zsh)"
@@ -230,17 +217,6 @@ fi
 
 # Added by Windsurf
 export PATH="/Users/shivase/.codeium/windsurf/bin:$PATH"
-
-function peco-src () {
-  local selected_dir=$(ghq list -p | peco --prompt="repositories >" --query "$LBUFFER")
-  if [ -n "$selected_dir" ]; then
-    BUFFER="cd ${selected_dir}"
-    zle accept-line
-  fi
-  zle clear-screen
-}
-zle -N peco-src
-bindkey '^]' peco-src
 
 # pnpm
 export PNPM_HOME="/Users/shivase/Library/pnpm"
@@ -291,68 +267,41 @@ unction set_aws_profile() {
   fi
 }
 
-function peco-src () {
-  local selected_dir=$(ghq list -p | peco --prompt="repositories >" --query "$LBUFFER")
-  if [ -n "$selected_dir" ]; then
-    BUFFER="cd ${selected_dir}"
-    zle accept-line
-  fi
-  zle clear-screen
-}
-zle -N peco-src
-bindkey '^]' peco-src
-
-# pecoでいまopenされているprのブランチをチェックアウトする
-function peco-checkout-github-pr() {
-  local selected_buffer=$(hub pr list -s open -L 20 --format='%t :%H :%I%n' | peco --prompt 'pull requests>')
-  if [ -n "$selected_buffer" ]; then
-    local pr_no=$(echo $selected_buffer | awk -F":" '{print $NF}')
-    hub pr checkout $pr_no
-  fi
-}
-
-function peco-git-branch() {
-  git branch -a --sort=-authordate |
-    grep -v -e '->' -e '*' |
-    perl -pe 's/^\h+//g' |
-    perl -pe 's#^remotes/origin/##' |
-    perl -nle 'print if !$c{$_}++' |
-    peco |
-    xargs git checkout
-}
-zle -N peco-git-branch
-bindkey '^[' peco-git-branch
-alias ghb="peco-git-branch"
-alias awsp=set_aws_profile
-alias ghr="peco-src"
-alias ghm='peco-checkout-github-pr'
-
-function gcloud-activate() {
-  name="$1"
-  project="$2"
-  echo "gcloud config configurations activate \"${name}\""
-  gcloud config configurations activate "${name}"
-}
-function gx-complete() {
-  _values $(gcloud config configurations list | awk '{print $1}')
-}
-function gx() {
-  name="$1"
-  if [ -z "$name" ]; then
-    line=$(gcloud config configurations list | peco)
-    name=$(echo "${line}" | awk '{print $1}')
-  else
-    line=$(gcloud config configurations list | grep "$name")
-  fi
-  project=$(echo "${line}" | awk '{print $4}')
-  gcloud-activate "${name}" "${project}"
-}
-compdef gx-complete gx
-alias gcpp="gx"
-
 alias brew="arch -arm64 brew"
-
-eval "$(gh copilot alias -- zsh)"
 
 . "$HOME/.local/bin/env"
 
+# wakatime
+export ZSH_WAKATIME_PROJECT_DETECTION=true
+
+#############################################
+# git auto status
+#############################################
+
+gitPreAutoStatusCommands=(
+  'add'
+  'rm'
+  'reset'
+  'commit'
+  'checkout'
+  'mv'
+  'init'
+)
+
+function elementInArray() {
+  local e
+  for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
+  return 1
+}
+
+function git() {
+  command git $@
+
+  if (elementInArray $1 $gitPreAutoStatusCommands); then
+    command git status
+  fi
+}
+
+#############################################
+
+alias claude="/Users/sumik/.claude/local/claude --dangerously-skip-permissions"
