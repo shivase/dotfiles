@@ -1,0 +1,43 @@
+#!/bin/bash
+
+echo "🚀 gcauto: 自動コミット処理を開始します..."
+
+commit_message=$(claude -p "ステージングされたgitの変更を確認し、conventional commitsフォーマットで日本語のコミットメッセージを作成してください。以下の形式で出力してください：
+
+型: 簡潔な変更内容
+
+- 具体的な変更点1
+- 具体的な変更点2
+- 具体的な変更点3
+
+注意事項：
+- 🤖やCo-Authored-Byなどの情報は含めないでください
+- コミットメッセージ本文のみを出力してください
+- 型は feat/fix/docs/style/refactor/test/chore から適切なものを選択してください")
+
+if [ -z "$commit_message" ]; then
+    echo "❌ エラー: コミットメッセージの生成に失敗しました"
+    exit 1
+fi
+
+echo -e "\n📝 生成されたコミットメッセージ:"
+echo "================================"
+echo "$commit_message"
+echo "================================"
+
+echo -e "\nこのメッセージでコミットしますか？ [y/N]: \c"
+read -r response
+
+if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    git commit -m "$commit_message"
+    
+    if [ $? -eq 0 ]; then
+        echo -e "\n✅ コミットが正常に完了しました!"
+    else
+        echo -e "\n❌ コミットに失敗しました"
+        exit 1
+    fi
+else
+    echo -e "\n⏹️  コミットをキャンセルしました"
+    exit 0
+fi
