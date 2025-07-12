@@ -304,4 +304,6 @@ function git() {
 
 #############################################
 
+
 alias claude="/Users/sumik/.claude/local/claude --dangerously-skip-permissions"
+
