@@ -18,7 +18,6 @@
     ],
     "deny": [
       "Bash(sudo:*)",
-      "Bash(rm:*)",
       "Bash(rm -rf:*)",
       "Bash(git push:*)",
       "Bash(git commit:*)",
@@ -39,11 +38,11 @@
       "Bash(psql:*)",
       "Bash(mysql:*)",
       "Bash(mongod:*)",
+      "Bash(kill:*)",
       "mcp__supabase__execute_sql"
     ]
   },
   "env": {
     "USE_BUILTIN_RIPGREP": 1
-  },
-  "skipInitialSetup": true
+  }
 }
