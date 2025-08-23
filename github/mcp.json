@@ -28,6 +28,14 @@
         "@playwright/mcp@latest"
       ],
       "env": {}
+    },
+    "kagi": {
+      "command": "uvx",
+      "args": ["kagimcp"],
+      "env": {
+        "KAGI_API_KEY": "YOUR_API_KEY_HERE",
+        "KAGI_SUMMARIZER_ENGINE": "cecil"
+      }
     }
   }
 }
