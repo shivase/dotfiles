@@ -2,8 +2,8 @@
   # 環境ごとに違う設定はここに定義する
   path = ~/.gitconfig.local
 [user]
-	name = shivase
-	email = shivase@legiotech.jp
+	name = sumik
+	email = sumik@legiotech.jp
 #  email =
 #  name  =
 [github]
