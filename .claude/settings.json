@@ -1,5 +1,4 @@
 {
-  "model": "sonnet",
   "permissions": {
     "allow": [
       "Bash(rg:*)",
@@ -20,11 +19,11 @@
       "Bash(git reset:*)",
       "Bash(git rebase:*)",
       "Read(.env.*)",
-      "Bash(kill:*)"
+      "Bash(kill:*)",
+      "WebSearch"
     ]
   },
   "env": {
-    "USE_BUILTIN_RIPGREP": 1,
-    "ANTHROPIC_MODEL": "claude-sonnet-4-20250514"
+    "USE_BUILTIN_RIPGREP": 1
   }
 }
