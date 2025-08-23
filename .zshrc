@@ -72,8 +72,9 @@ if (( ${+commands[vim]} )); then
   alias vi='vim'
 fi
 
-alias ll='ls -l'
+alias ll='ls -vl'
 alias greps='rg --hidden -p'
+alias claude='claude --dangerously-skip-permissions'
 
 # -------------------------------------------------
 # user environment
@@ -130,6 +131,7 @@ path=(
   /opt/homebrew/opt/coreutils/libexec/gnubin(N-/)
   /opt/homebrew/opt/llvm/bin(N-/)
   /Library/TeX/texbin(N-/)
+  /opt/homebrew/opt/postgresql@15/bin(N-/)
   $path
 )
 # /Library/TeX/texbin(N-/)
@@ -305,5 +307,9 @@ function git() {
 #############################################
 
 
-alias claude="/Users/sumik/.claude/local/claude --dangerously-skip-permissions"
+export GOOGLE_CLOUD_PROJECT="gen-lang-client-0651540505"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/sumik/.lmstudio/bin"
+# End of LM Studio CLI section
 
