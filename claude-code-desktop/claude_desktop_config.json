@@ -1,0 +1,52 @@
+{
+  "mcpServers": {
+    "serena": {
+      "type": "stdio",
+      "command": "/Users/sumik/.local/bin/uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--context",
+        "ide-assistant"
+      ],
+      "env": {}
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "/Users/sumik/.local/share/mise/shims/npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "env": {}
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "/Users/sumik/.local/share/mise/shims/npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": {}
+    },
+    "jetbrains": {
+      "command": "/Users/sumik/Applications/IntelliJ IDEA Ultimate.app/Contents/jbr/Contents/Home/bin/java",
+      "args": [
+        "-classpath",
+        "/Users/sumik/Applications/IntelliJ IDEA Ultimate.app/Contents/plugins/mcpserver/lib/mcpserver-frontend.jar:/Users/sumik/Applications/IntelliJ IDEA Ultimate.app/Contents/lib/util-8.jar",
+        "com.intellij.mcpserver.stdio.McpStdioRunnerKt"
+      ],
+      "env": {
+        "IJ_MCP_SERVER_PORT": "64342"
+      }
+    },
+    "kagi": {
+      "command": "/Users/sumik/.local/bin/uvx",
+      "args": ["kagimcp"],
+      "env": {
+        "KAGI_API_KEY": "",
+        "KAGI_SUMMARIZER_ENGINE": "cecil"
+      }
+    },
+    "deepwiki": {
+      "command": "/Users/sumik/.local/share/mise/shims/npx",
+      "args": ["mcp-remote", "https://mcp.deepwiki.com/sse"]
+    }
+  }
+}
