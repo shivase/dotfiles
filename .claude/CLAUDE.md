@@ -204,3 +204,41 @@ Task(
 - JetBrains IDEと連携している場合、IDE内のコンテキストを活用
 
 これらのツールを組み合わせることで、より効率的で正確な開発支援が可能になります。
+
+## Task Management & TodoWrite Usage
+
+### 重要: TodoWrite使用時の階層順序
+**TodoWriteツールを使用する際は、必ず正しい階層順序でタスクを記録してください：**
+
+#### 正しいTodo記録例
+```
+1. PO Agentで戦略決定と要件定義
+2. Manager Agentでタスク分析と配分計画
+3. Developer Agentで具体的な実装作業
+4. 各Developerが必要に応じてserena-expertを活用
+```
+
+#### TodoWrite実行時の注意点
+- **必ずPO Agentから開始**: 最初のタスクは「PO Agent」で始める
+- **階層順序を厳守**: PO → Manager → Developer → serena-expertの順序
+- **serena-expertは最後**: Developerが内部的に使用する位置づけ
+
+#### 間違った例（絶対に避ける）
+```
+❌ serena-expertでプロジェクト開始
+❌ Developerから直接開始
+❌ Manager → PO の逆順
+```
+
+#### 正しい例
+```
+✅ PO Agentでプロジェクト戦略決定
+✅ Manager Agentでタスク配分
+✅ Developer Agentで実装
+✅ serena-expertは各Developer内部で使用
+```
+
+### TodoWriteの効果的な活用
+- **複雑なプロジェクト**: 階層システム全体をTodoで追跡
+- **段階的実行**: 各段階完了後に次段階のTodoを更新
+- **並列作業**: 複数Developerの並行作業をTodoで管理
