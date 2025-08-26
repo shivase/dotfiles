@@ -119,7 +119,7 @@ Task(
    - 計画書や設計書の下書き
 
 2. **保護すべきファイル**
-   - Agent定義ファイル（po-agent.md、manager-agent.md、developer-agent.md、serena-expert.md）
+   - Agent定義ファイル（po-agent.md、manager-agent.md、developer-agent.md）
    - 最終成果物
    - ユーザーが明示的に残すよう指示したファイル
 
@@ -146,7 +146,6 @@ Task(
 3. Developer Agentで具体的な実装作業
 
 #### 間違った例（絶対に避ける）
-❌ serena-expertでプロジェクト開始
 ❌ Developerから直接開始
 ❌ Manager → PO の逆順
 
