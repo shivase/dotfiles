@@ -79,11 +79,6 @@ alias claude='claude --dangerously-skip-permissions'
 # -------------------------------------------------
 # user environment
 
-# for work environment ( override if needed )
-if [ -f $HOME/.zshrc.work ]; then
-  source $HOME/.zshrc.work
-fi
-
 # brew api token
 if [ -f ~/.brew_api_token ];then
   source ~/.brew_api_token
@@ -133,6 +128,7 @@ path=(
   /opt/homebrew/opt/trash/bin(N-/)
   /Library/TeX/texbin(N-/)
   /opt/homebrew/opt/postgresql@15/bin(N-/)
+  ~/.lmstudio/bin(N-/)
   $path
 )
 # /Library/TeX/texbin(N-/)
@@ -350,12 +346,37 @@ rm () {
     /opt/homebrew/opt/trash/bin/trash -- "${targets[@]}"
   fi
 }
-# --------------------------------------------------------------
 
+# =================================================
+# 環境別設定ファイルの読み込み（最後に読み込んで最優先）
+# =================================================
+# 優先順位（後から読み込まれるものが優先）:
+# 1. .zshrc.local   - ローカル環境固有の設定
+# 2. .zshrc.work    - 仕事環境用の設定
+# 3. .zshrc.home    - 自宅環境用の設定
+# 4. .zshrc.private - プライベートな設定（gitignoreに追加推奨）
+# 5. .zshrc.$(hostname -s) - ホスト名固有の設定
 
-export GOOGLE_CLOUD_PROJECT="gen-lang-client-0651540505"
+# ベースとなる環境別設定
+for env_file in local work home private; do
+  if [ -f "$HOME/.zshrc.$env_file" ]; then
+    source "$HOME/.zshrc.$env_file"
+    # デバッグ用（必要に応じてコメントアウト）
+    # echo "Loaded: .zshrc.$env_file"
+  fi
+done
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/sumik/.lmstudio/bin"
-# End of LM Studio CLI section
+# ホスト名ベースの設定（最優先）
+HOST_CONFIG="$HOME/.zshrc.$(hostname -s)"
+if [ -f "$HOST_CONFIG" ]; then
+  source "$HOST_CONFIG"
+  # デバッグ用（必要に応じてコメントアウト）
+  # echo "Loaded: .zshrc.$(hostname -s)"
+fi
+
+# プロジェクト固有の設定（カレントディレクトリに.envrcがある場合）
+# direnvを使用している場合は、direnvに任せる
+if ! command -v direnv &> /dev/null && [ -f "./.envrc" ]; then
+  source "./.envrc"
+fi
 
