@@ -214,17 +214,6 @@ if command -v starship &> /dev/null; then
   eval "$(starship init zsh)"
 fi
 
-# Added by Windsurf
-export PATH="/Users/shivase/.codeium/windsurf/bin:$PATH"
-
-# pnpm
-export PNPM_HOME="/Users/shivase/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
 PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
 unction set_aws_profile() {
