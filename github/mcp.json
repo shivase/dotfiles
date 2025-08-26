@@ -16,7 +16,11 @@
         "--from",
         "git+https://github.com/oraios/serena",
         "serena",
-        "start-mcp-server"
+        "start-mcp-server",
+        "--context",
+        "ide-assistant",
+        "--project",
+        "."
       ],
       "env": {}
     },
@@ -30,13 +34,21 @@
       "env": {}
     },
     "kagi": {
+      "type": "stdio",
       "command": "uvx",
       "args": ["kagimcp"],
       "env": {
-        "KAGI_API_KEY": "YOUR_API_KEY_HERE",
+        "KAGI_API_KEY": "",
         "KAGI_SUMMARIZER_ENGINE": "cecil"
       }
+    },
+    "deepwiki": {
+      "type": "stdio",
+      "command": "/Users/sumik/.local/share/mise/shims/npx",
+      "args": [
+        "mcp-remote",
+        "https://mcp.deepwiki.com/sse"
+      ]
     }
   }
 }
-
