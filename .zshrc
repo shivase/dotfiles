@@ -151,7 +151,12 @@ zplug "mafredri/zsh-async", from:github
 zplug "modules/osx", from:prezto, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "spaceship-prompt/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
-zplug 'sobolevn/wakatime-zsh-plugin'
+
+# Wakatimeプラグイン（仕事環境では無効化）
+# .zshrc.workが存在する場合は読み込まない
+if [ ! -f "$HOME/.zshrc.work" ]; then
+  zplug 'sobolevn/wakatime-zsh-plugin'
+fi
 
 if ! zplug check; then
   zplug install
@@ -257,10 +262,15 @@ unction set_aws_profile() {
 
 alias brew="arch -arm64 brew"
 
-. "$HOME/.local/bin/env"
+# .local/bin/env（存在する場合のみ読み込み）
+if [ -f "$HOME/.local/bin/env" ]; then
+  . "$HOME/.local/bin/env"
+fi
 
-# wakatime
-export ZSH_WAKATIME_PROJECT_DETECTION=true
+# wakatime（仕事環境では無効化）
+if [ ! -f "$HOME/.zshrc.work" ]; then
+  export ZSH_WAKATIME_PROJECT_DETECTION=true
+fi
 
 #############################################
 # git auto status
