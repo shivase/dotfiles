@@ -14,3 +14,8 @@ export LS_COLORS='no=01;37:fi=00:di=01;36:ln=01;32:pi=40;33:so=01;35:bd=40;33;01
 export GREP_COLOR='1;37;41'
 
 . "$HOME/.local/bin/env"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/sumik/.lmstudio/bin"
+# End of LM Studio CLI section
+
