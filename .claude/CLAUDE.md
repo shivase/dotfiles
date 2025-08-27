@@ -50,13 +50,81 @@ mise run build
 - serena MCPサーバーはトークン効率的な開発を実現する強力なツールです
 - 単純な1行の変更やファイル読み込みのみの場合を除き、常に活用を検討してください
 
+#### 🚨 重要: serenaプロジェクトの初期化
+**プロジェクトで作業を開始する前に、必ず以下を実行してください：**
+
+1. **プロジェクトルートに`.serena`フォルダが存在するか確認**
+   ```bash
+   ls -la .serena
+   ```
+
+2. **`.serena`フォルダが存在しない場合、即座にserenaプロジェクトを初期化**
+   ```
+   # serena MCPツールを使用してプロジェクトをアクティベート
+   mcp__serena__activate_project(project=".")
+   ```
+   - これにより`.serena/project.yml`が自動生成されます
+   - プロジェクトの言語が自動検出されます
+   - serenaの全機能が利用可能になります
+
+3. **大規模プロジェクトの場合はインデックスを作成（推奨）**
+   - プロジェクトが大規模な場合、パフォーマンス向上のため事前インデックスを推奨
+   - `execute_shell_command`ツールでインデックス作成可能
+
 #### serena MCPサーバーの主要ツール
+**プロジェクト管理**
+- `mcp__serena__activate_project`: プロジェクトのアクティベート（初期化）
+- `mcp__serena__get_active_project`: 現在のアクティブプロジェクト確認
+
+**シンボル操作**
 - `mcp__serena__find_symbol`: シンボル検索
+- `mcp__serena__find_referencing_symbols`: シンボル参照検索
 - `mcp__serena__get_symbols_overview`: ファイル概要取得
-- `mcp__serena__search_for_pattern`: パターン検索
-- `mcp__serena__replace_symbol_body`: シンボル置換
+
+**コード編集**
+- `mcp__serena__replace_symbol_body`: シンボル本体の置換
 - `mcp__serena__insert_before_symbol`: シンボル前挿入
 - `mcp__serena__insert_after_symbol`: シンボル後挿入
+- `mcp__serena__replace_regex`: 正規表現置換
+
+**ファイル操作**
+- `mcp__serena__read_file`: ファイル読み込み
+- `mcp__serena__create_text_file`: テキストファイル作成
+- `mcp__serena__search_for_pattern`: パターン検索
+
+**システム連携**
+- `mcp__serena__execute_shell_command`: シェルコマンド実行
+
+#### serena使用時の注意事項
+- プロジェクトをアクティベートしないとserenaの機能は使用できません
+- 複数プロジェクトを扱う場合は、プロジェクト切り替え時に再アクティベートが必要
+- `.serena`フォルダにはプロジェクト設定、ログ、メモリが保存されます
+
+#### 🔄 重要: serenaプロジェクトの定期的な更新
+**コードベースが変更された場合、serenaの情報を最新化する必要があります：**
+
+1. **以下のタイミングで必ずserenaを再アクティベート**
+   - 大量のファイル作成・削除後
+   - リファクタリング完了後
+   - 外部からのコード取り込み後（git pull、merge等）
+   - 新しいモジュールやパッケージの追加後
+   - プロジェクト構造の変更後
+
+2. **再アクティベートの方法**
+   ```
+   # プロジェクトを再度アクティベートして最新情報を取得
+   mcp__serena__activate_project(project=".")
+   ```
+
+3. **インデックスの再構築（大規模変更時）**
+   - 大規模な変更があった場合は、インデックスの再構築も検討
+   - これによりserenaのパフォーマンスが向上します
+
+4. **自動検知のタイミング**
+   - ファイルが見つからないエラーが発生した時
+   - シンボルが検索できなくなった時
+   - 予期しない結果が返ってきた時
+   → これらの兆候があれば即座に再アクティベート
 
 ## Agent System Usage
 
@@ -153,6 +221,32 @@ Task(
 - **コードベース分析と操作のための高度なMCPサーバー**
 - シンボル検索、パターンマッチング、効率的なコード編集
 - `mcp__serena__`プレフィックスで各種ツールを利用
+
+### sequentialthinking（複雑な問題解決）
+- **段階的思考プロセスを実現するMCPサーバー**
+- 複雑な問題を論理的に分解し、段階的に解決
+- **使用すべきケース：**
+  - アルゴリズムの設計と実装
+  - 複雑なバグの原因究明とデバッグ
+  - アーキテクチャ設計と技術選定
+  - 数学的・論理的問題の解決
+  - パフォーマンス最適化の分析
+  - セキュリティ脆弱性の分析
+- **ツール：** `mcp__sequential-thinking__sequential_thinking`
+  - 段階的な思考過程を記録し、論理的な結論に到達
+
+#### sequentialthinking使用例
+```python
+# 複雑なアルゴリズム問題の解決
+mcp__sequential-thinking__sequential_thinking(
+    prompt="最適な検索アルゴリズムを選択し、実装方法を設計する"
+)
+
+# デバッグ時の段階的分析
+mcp__sequential-thinking__sequential_thinking(
+    prompt="メモリリークの原因を特定し、修正方法を提案する"
+)
+```
 
 ### その他のMCPサーバー
 - **context7**: ライブラリドキュメントの取得

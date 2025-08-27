@@ -9,6 +9,18 @@
       ],
       "env": {}
     },
+    "serena": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--context ide-assistant"
+      ],
+      "env": {}
+    },
     "playwright": {
       "type": "stdio",
       "command": "npx",
@@ -24,34 +36,22 @@
         "kagimcp"
       ],
       "env": {
-        "KAGI_API_KEY": "",
+        "KAGI_API_KEY": "INPUT ME",
         "KAGI_SUMMARIZER_ENGINE": "cecil"
       }
     },
-    "jetbrains": {
-      "url": "http://localhost:64342/sse",
-      "type": "sse"
-    },
-    "serena": {
-      "type": "stdio",
-      "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/oraios/serena",
-        "serena",
-        "start-mcp-server",
-        "--context",
-        "ide-assistant",
-        "--project",
-        "."
-      ],
-      "env": {}
-    },
     "deepwiki": {
-      "command": "/Users/sumik/.local/share/mise/shims/npx",
+      "command": "npx",
       "args": [
         "mcp-remote",
         "https://mcp.deepwiki.com/sse"
+      ]
+    },
+    "sequentialthinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
       ]
     }
   }
