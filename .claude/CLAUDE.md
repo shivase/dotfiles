@@ -21,6 +21,30 @@
 
 ## Development Strategy
 
+### 必須: miseを使用したコマンド実行
+**プロジェクトディレクトリに `.mise.toml` ファイルが存在する場合：**
+- **miseがインストールされていることを意味します**
+- **全てのコマンドは mise を通して実行してください**
+- 個別のコマンドを直接実行するのではなく、`mise run` を使用
+
+#### mise使用例
+```bash
+# ❌ 避けるべき直接実行
+npm install
+npm run dev
+npm run build
+
+# ✅ 正しいmise経由の実行
+mise run install
+mise run dev
+mise run build
+```
+
+#### mise確認手順
+1. プロジェクトルートで `.mise.toml` の存在を確認
+2. 存在する場合、`mise tasks` でタスク一覧を確認
+3. 適切なmiseタスクを使用してコマンドを実行
+
 ### 必須: serena MCPサーバーの活用
 - **基本的に全ての開発タスクで serena MCPサーバーを活用してください**
 - serena MCPサーバーはトークン効率的な開発を実現する強力なツールです
