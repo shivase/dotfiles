@@ -47,6 +47,21 @@
     "deepwiki": {
       "command": "/Users/sumik/.local/share/mise/shims/npx",
       "args": ["mcp-remote", "https://mcp.deepwiki.com/sse"]
+    },
+    "sequentialthinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "cipher": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@byterover/cipher", "-- cipher --mode mcp"],
+      "env": {
+        "CIPHER_EMBEDDER": "local"
+      }
     }
   }
 }
