@@ -53,6 +53,17 @@
         "-y",
         "@modelcontextprotocol/server-sequential-thinking"
       ]
-    }
+    },
+    "translate-srt": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/sumik5/translate-srt-mcp",
+        "translate-srt-mcp"
+      ],
+      "env": {
+        "LM_STUDIO_URL": "http://localhost:1234",
+        "LM_MODEL_NAME": "grapevine-AI/plamo-2-translate@q4_k_m"
+      }
   }
 }
