@@ -115,6 +115,7 @@ path=(
   /Applications/TeXLive/Library/mactexaddons
   $HOME/dotfiles/bin             # original dotfiles bin
   $HOME/.cabal/bin               # haskel package manager
+  $HOME/Dropbox/bin(N-/)
   /opt/homebrew/bin(N-/)
   /opt/homebrew/sbin(N-/)
   /opt/homebrew/share/google-cloud-sdk/path.zsh.inc
@@ -378,4 +379,9 @@ fi
 if ! command -v direnv &> /dev/null && [ -f "./.envrc" ]; then
   source "./.envrc"
 fi
+
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/sumik/.lmstudio/bin"
+# End of LM Studio CLI section
 
